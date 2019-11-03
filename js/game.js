@@ -6,11 +6,11 @@ const Game = {
   fps: 60,
   framesCounter: 0,
   playerKeys: {
-    ARROW_UP: 38,
-    ARROW_RIGHT: 39,
-    ARROW_DOWN: 40,
-    ARROW_LEFT: 37,
-    SPACE: 32
+    arrowUp: false,
+    arrowRight: false,
+    arrowDown: false,
+    arrowLeft: false,
+    space: false
   },
 
   init: function() {
@@ -60,7 +60,6 @@ const Game = {
       this.width,
       this.height
     );
-
     this.sClouds = [];
     this.tClouds = [];
   },
@@ -89,6 +88,8 @@ const Game = {
     this.tClouds.forEach(cloud => cloud.move());
     this.player.move();
     this.sClouds.forEach(cloud => cloud.move());
+    // console.log(this.tClouds);
+    // console.log(this.sClouds);
   },
 
   clearClouds: function() {
