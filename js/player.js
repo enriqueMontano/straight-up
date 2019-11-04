@@ -48,7 +48,6 @@ class Player {
     this.clearBullets();
     this.bullets.forEach(bullet => bullet.draw(framesCounter));
     this.animate(framesCounter);
-
   }
 
   move() {
@@ -127,11 +126,24 @@ class Player {
 
   shoot() {
     this.bullets.push(
-      new Bullet(this.ctx, 5, 24, "./img/laser-bolts.png", this.posX, this.posY, this.width, this.height)
+      new Bullet(
+        this.ctx,
+        5,
+        13,
+        "./img/laser-bolt-2.png",
+        this.posX,
+        this.posY,
+        this.width,
+        this.height,
+        1,
+        "player"
+      )
     );
   }
 
   clearBullets() {
-    this.bullets = this.bullets.filter(bullet => bullet.posY + bullet.height >= this.height);
+    this.bullets = this.bullets.filter(
+      bullet => bullet.posY + bullet.height >= this.height
+    );
   }
 }

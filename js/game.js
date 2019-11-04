@@ -39,6 +39,7 @@ const Game = {
       this.generateClouds();
       this.generateEnemys();
       this.generatePowerUps();
+      if(this.isCollision()) this.gameOver()
       if (this.framesCounter > 1000) this.framesCounter = 0;
     }, 1000 / this.fps);
   },
@@ -87,30 +88,74 @@ const Game = {
 
   generateEnemys: function() {
     if (this.framesCounter % 50 === 0)
-    this.sEnemys.push(
-      new Enemy(this.ctx, 16, 16, "./img/enemy-small.png", this.width / 2, 0, 1, 1)
-    );
+      this.sEnemys.push(
+        new Enemy(
+          this.ctx,
+          16,
+          16,
+          "./img/enemy-small.png",
+          this.width / 2,
+          0,
+          1,
+          1,
+          "small"
+        )
+      );
     if (this.framesCounter % 100 === 0)
-    this.mEnemys.push(
-      new Enemy(this.ctx, 32, 16, "./img/enemy-medium.png", this.width / 2 - 50, 2, 2)
-    );
+      this.mEnemys.push(
+        new Enemy(
+          this.ctx,
+          32,
+          16,
+          "./img/enemy-medium.png",
+          this.width / 2 - 50,
+          2,
+          2,
+          "medium"
+        )
+      );
     if (this.framesCounter % 150 === 0)
-    this.bEnemys.push(
-      new Enemy(this.ctx, 16, 16, "./img/enemy-big.png", this.width / 2 + 50, 3, 3)
-    );
+      this.bEnemys.push(
+        new Enemy(
+          this.ctx,
+          16,
+          16,
+          "./img/enemy-big.png",
+          this.width / 2 + 50,
+          3,
+          3,
+          "big"
+        )
+      );
   },
 
   generatePowerUps: function() {
     if (this.framesCounter % 60 === 0)
-    this.firstPower.push(
-      new Powerup(this.ctx, 8, 8, "./img/power-up-1.png", this.width / 2 - 100, 0, 1)
-    );
+      this.firstPower.push(
+        new Powerup(
+          this.ctx,
+          8,
+          8,
+          "./img/power-up-1.png",
+          this.width / 2 - 100,
+          0,
+          1
+        )
+      );
     if (this.framesCounter % 120 === 0)
-    this.secondPower.push(
-      new Powerup(this.ctx, 8, 8, "./img/power-up-2.png", this.width / 2 + 100, 0, 3)
-    );
+      this.secondPower.push(
+        new Powerup(
+          this.ctx,
+          8,
+          8,
+          "./img/power-up-2.png",
+          this.width / 2 + 100,
+          0,
+          3
+        )
+      );
   },
-  
+
   drawAll: function() {
     this.desertBackground.draw();
     this.tClouds.forEach(cloud => cloud.draw());
@@ -138,8 +183,8 @@ const Game = {
     // console.log(this.sEnemys);
     // console.log(this.mEnemys);
     // console.log(this.bEnemys);
-    console.log(this.firstPower);
-    console.log(this.secondPower);
+    // console.log(this.firstPower);
+    // console.log(this.secondPower);
   },
 
   clearClouds: function() {
@@ -174,5 +219,15 @@ const Game = {
 
   clear: function() {
     this.ctx.clearRect(0, 0, this.width, this.height);
+  },
+
+  isCollision: function() {
+    return this.sEnemys.some(enemy => (this.player.posX + this.player.width > enemy.posX && enemy.posX + enemy.width > this.player.posX && this.player.posY + this.player.height > enemy.posY && enemy.posY + enemy.height > this.player.posY ))
+    // return this.mEnemys.some(enemy => (this.player.posX + this.player.width > enemy.posX && enemy.posX + enemy.width > this.player.posX && this.player.posY + this.player.height > enemy.posY && enemy.posY + enemy.height > this.player.posY ))
+    // return this.bEnemys.some(enemy => (this.player.posX + this.player.width > enemy.posX && enemy.posX + enemy.width > this.player.posX && this.player.posY + this.player.height > enemy.posY && enemy.posY + enemy.height > this.player.posY ))
+  },
+
+  gameOver: function() {
+    clearInterval(this.interval)
   }
 };

@@ -7,7 +7,9 @@ class Bullet {
     playerX,
     playerY,
     playerWidth,
-    playerHeight
+    playerHeight,
+    speed,
+    playerType
   ) {
     this.ctx = ctx;
     this.width = width;
@@ -21,7 +23,8 @@ class Bullet {
 
     this.posX = (playerWidth - 5) / 2 + playerX;
     this.posY = playerY - playerHeight;
-    this.vY = 3;
+    this.vY = speed;
+    this.playerType = playerType;
   }
 
   draw(framesCounter) {
@@ -40,11 +43,17 @@ class Bullet {
   }
 
   animate(framesCounter) {
-    if (framesCounter % 10 === 0) this.framesIndex++;
+    if (framesCounter % 5 === 0) this.framesIndex++;
     if (this.framesIndex > 1) this.framesIndex = 0;
   }
 
   move() {
-    this.posY -= this.vY;
-  }
+    if(this.playerType === "player"){
+      this.posY -= this.vY;
+    }
+    if(this.playerType === "enemy"){
+      this.posY += this.vY;
+    }
+   }
+
 }

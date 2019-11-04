@@ -1,42 +1,115 @@
 class Enemy {
-    constructor(ctx, width, height, image, posX, posY, speed){
-        this.ctx = ctx;
-        this.width = width;
-        this.height = height;
-        
-        this.image = new Image();
-        this.image.src = image;
+  constructor(ctx, width, height, image, posX, posY, speed, enemyType) {
+    this.ctx = ctx;
+    this.width = width;
+    this.height = height;
 
-        this.frames = 2;
-        this.framesIndex = 0;
+    this.image = new Image();
+    this.image.src = image;
 
-        this.posX = posX;
-        this.posY = posY - height;
-        
-        this.vY = speed;
-    }
+    this.frames = 2;
+    this.framesIndex = 0;
 
-    draw(framesCounter){
-        this.ctx.drawImage(
-            this.image,
-            this.framesIndex * Math.floor(this.image.width / this.frames),
-            0,
-            Math.floor(this.image.width / this.frames),
-            this.image.height,
-            this.posX,
-            this.posY,
-            this.width,
-            this.height
-          );
-          this.animate(framesCounter);
-    }
+    this.posX = posX;
+    this.posY = posY - height;
 
-    animate(framesCounter) {
-        if (framesCounter % 10 === 0) this.framesIndex++;
-        if (this.framesIndex > 1) this.framesIndex = 0;
-      }
+    this.vY = speed;
 
-    move(){
-        this.posY += this.vY;
-    }
+    this.enemyType = enemyType;
+
+    this.sBullets = [];
+    this.mBullets = [];
+    this.bBullets = [];
+  }
+
+  draw(framesCounter) {
+    this.ctx.drawImage(
+      this.image,
+      this.framesIndex * Math.floor(this.image.width / this.frames),
+      0,
+      Math.floor(this.image.width / this.frames),
+      this.image.height,
+      this.posX,
+      this.posY,
+      this.width,
+      this.height
+    );
+    // this.clearBullets();
+    this.sBullets.forEach(bullet => bullet.draw(framesCounter));
+    this.mBullets.forEach(bullet => bullet.draw(framesCounter));
+    this.bBullets.forEach(bullet => bullet.draw(framesCounter));
+    this.animate(framesCounter);
+  }
+
+  animate(framesCounter) {
+    if (framesCounter % 10 === 0) this.framesIndex++;
+    if (this.framesIndex > 1) this.framesIndex = 0;
+  }
+
+  move() {
+    this.posY += this.vY;
+    this.sBullets.forEach(bullet => bullet.move());
+    this.mBullets.forEach(bullet => bullet.move());
+    this.bBullets.forEach(bullet => bullet.move());
+  }
+
+  generateBullets() {
+    if (this.framesCounter % 50 === 0 && this.enemyType === "small")
+      this.sBullets.push(
+        new Bullet(
+          this.ctx,
+          5,
+          13,
+          "./img/laser-bolt-1.png",
+          this.posX,
+          this.posY,
+          this.width,
+          this.height,
+          1,
+          "enemy"
+        )
+      );
+    if (this.framesCounter % 50 === 0 && this.enemyType === "medium")
+      this.mBullets.push(
+        new Bullet(
+          this.ctx,
+          5,
+          13,
+          "./img/laser-bolt-1.png",
+          this.posX,
+          this.posY,
+          this.width,
+          this.height,
+          2,
+          "enemy"
+        )
+      );
+    if (this.framesCounter % 50 === 0 && this.enemyType === "big")
+      this.bBullets.push(
+        new Bullet(
+          this.ctx,
+          5,
+          13,
+          "./img/laser-bolt-1.png",
+          this.posX,
+          this.posY,
+          this.width,
+          this.height,
+          3,
+          "enemy"
+        )
+      );
+  }
+
+//   clearBullets() {
+//     this.sBullets = this.sBullets.filter(
+//       bullet => bullet.posY + bullet.height >= this.height
+//     );
+//     this.mBullets = this.mBullets.filter(
+//       bullet => bullet.posY + bullet.height >= this.height
+//     );
+//     this.bBullets = this.bBullets.filter(
+//       bullet => bullet.posY + bullet.height >= this.height
+//     );
+//   }
 }
