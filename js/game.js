@@ -34,7 +34,11 @@ const Game = {
       this.moveAll();
 
       this.clearClouds();
+      this.clearEnemys();
+      // this.clearPowerUps();
       this.generateClouds();
+      this.generateEnemys();
+      this.generatePowerUps();
       if (this.framesCounter > 1000) this.framesCounter = 0;
     }, 1000 / this.fps);
   },
@@ -62,6 +66,11 @@ const Game = {
     );
     this.sClouds = [];
     this.tClouds = [];
+    this.sEnemys = [];
+    this.mEnemys = [];
+    this.bEnemys = [];
+    this.firstPower = [];
+    this.secondPower = [];
   },
 
   generateClouds: function() {
@@ -76,10 +85,41 @@ const Game = {
       );
   },
 
+  generateEnemys: function() {
+    if (this.framesCounter % 50 === 0)
+    this.sEnemys.push(
+      new Enemy(this.ctx, 16, 16, "./img/enemy-small.png", this.width / 2, 0, 1, 1)
+    );
+    if (this.framesCounter % 100 === 0)
+    this.mEnemys.push(
+      new Enemy(this.ctx, 32, 16, "./img/enemy-medium.png", this.width / 2 - 50, 2, 2)
+    );
+    if (this.framesCounter % 150 === 0)
+    this.bEnemys.push(
+      new Enemy(this.ctx, 16, 16, "./img/enemy-big.png", this.width / 2 + 50, 3, 3)
+    );
+  },
+
+  generatePowerUps: function() {
+    if (this.framesCounter % 60 === 0)
+    this.firstPower.push(
+      new Powerup(this.ctx, 8, 8, "./img/power-up-1.png", this.width / 2 - 100, 0, 1)
+    );
+    if (this.framesCounter % 120 === 0)
+    this.secondPower.push(
+      new Powerup(this.ctx, 8, 8, "./img/power-up-2.png", this.width / 2 + 100, 0, 3)
+    );
+  },
+  
   drawAll: function() {
     this.desertBackground.draw();
     this.tClouds.forEach(cloud => cloud.draw());
     this.player.draw(this.framesCounter);
+    this.sEnemys.forEach(enemy => enemy.draw(this.framesCounter));
+    this.mEnemys.forEach(enemy => enemy.draw(this.framesCounter));
+    this.bEnemys.forEach(enemy => enemy.draw(this.framesCounter));
+    this.firstPower.forEach(powerUp => powerUp.draw(this.framesCounter));
+    this.secondPower.forEach(powerUp => powerUp.draw(this.framesCounter));
     this.sClouds.forEach(cloud => cloud.draw());
   },
 
@@ -87,9 +127,19 @@ const Game = {
     this.desertBackground.move();
     this.tClouds.forEach(cloud => cloud.move());
     this.player.move();
+    this.sEnemys.forEach(enemy => enemy.move());
+    this.mEnemys.forEach(enemy => enemy.move());
+    this.bEnemys.forEach(enemy => enemy.move());
+    this.firstPower.forEach(powerUp => powerUp.move());
+    this.secondPower.forEach(powerUp => powerUp.move());
     this.sClouds.forEach(cloud => cloud.move());
     // console.log(this.tClouds);
     // console.log(this.sClouds);
+    // console.log(this.sEnemys);
+    // console.log(this.mEnemys);
+    // console.log(this.bEnemys);
+    console.log(this.firstPower);
+    console.log(this.secondPower);
   },
 
   clearClouds: function() {
@@ -98,6 +148,27 @@ const Game = {
     );
     this.tClouds = this.tClouds.filter(
       cloud => cloud.posY - cloud.height <= this.height
+    );
+  },
+
+  clearEnemys: function() {
+    this.sEnemys = this.sEnemys.filter(
+      enemy => enemy.posY - enemy.height <= this.height
+    );
+    this.mEnemys = this.mEnemys.filter(
+      enemy => enemy.posY - enemy.height <= this.height
+    );
+    this.bEnemys = this.bEnemys.filter(
+      enemy => enemy.posY - enemy.height <= this.height
+    );
+  },
+
+  clearPowerUps: function() {
+    this.firstPower = this.firstPower.filter(
+      powerUp => powerUp.posY - powerUp.height <= this.height
+    );
+    this.secondPower = this.secondPower.filter(
+      powerUp => powerUp.posY - powerUp.height <= this.height
     );
   },
 

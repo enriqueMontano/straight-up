@@ -14,6 +14,9 @@ class Player {
     this.width = width;
     this.height = height;
 
+    this.gameWidth = gameWidth;
+    this.gameHeight = gameHeight;
+
     this.image = new Image();
     this.image.src = image;
 
@@ -28,9 +31,6 @@ class Player {
     this.bullets = [];
 
     this.setListeners();
-
-    this.gameWidth = gameWidth;
-    this.gameHeight = gameHeight;
   }
 
   draw(framesCounter) {

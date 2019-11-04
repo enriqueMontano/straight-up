@@ -16,12 +16,12 @@ class Bullet {
     this.image = new Image();
     this.image.src = image;
 
+    this.framesIndex = 0;
+    this.frames = 2;
+
     this.posX = (playerWidth - 5) / 2 + playerX;
     this.posY = playerY - playerHeight;
     this.vY = 3;
-
-    this.framesIndex = 0;
-    this.frames = 2;
   }
 
   draw(framesCounter) {
