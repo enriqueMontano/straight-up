@@ -35,11 +35,32 @@ const Game = {
 
       this.clearClouds();
       this.clearEnemys();
-      // this.clearPowerUps();
+      this.clearPowerUps();
       this.generateClouds();
       this.generateEnemys();
       this.generatePowerUps();
-      if(this.isCollision()) this.gameOver()
+
+      if (
+        this.isCollisionSmall() ||
+        this.isCollisionMedium() ||
+        this.isCollisionBig()
+      ) {
+        this.generatePlayerExplosion();
+        // this.generateSenemyExplosion();
+        // this.generateMenemyExplosion();
+        // this.generateBenemyExplosion();
+
+        // this.gameOver();
+      }
+
+      // if (this.isCollisionFirstPowerUp()) {
+      //   // this.firstPowerUp();
+      // }
+
+      // if (this.isCollisionSecondPowerUp()) {
+      //   // this.secondPowerUp();
+      // }
+
       if (this.framesCounter > 1000) this.framesCounter = 0;
     }, 1000 / this.fps);
   },
@@ -65,11 +86,19 @@ const Game = {
       this.width,
       this.height
     );
+
+    this.playerExplosion = [];
+    // this.sEnemyExplosion = [];
+    // this.mEnemyExplosion = [];
+    // this.bEnemyExplosion = [];
+
     this.sClouds = [];
     this.tClouds = [];
+
     this.sEnemys = [];
     this.mEnemys = [];
     this.bEnemys = [];
+
     this.firstPower = [];
     this.secondPower = [];
   },
@@ -86,8 +115,41 @@ const Game = {
       );
   },
 
+  generatePlayerExplosion: function() {
+    // console.log(this.player.posX);
+    this.playerExplosion.push(
+      new Explosion(this.ctx, 30, 30, this.player.posX, this.player.posY)
+    );
+  },
+
+  // generateSenemyExplosion: function() {
+  //   this.sEnemyExplosion.push(
+  //         new Explosion(
+  //           this.ctx,
+  //           30,
+  //           30,
+  //           this.sEnemys.enemy.posX,
+  //           this.sEnemys.enemy.posY
+  //         );
+  //   );
+  // },
+
+  // generateMenemyExplosion: function() {
+  //   // console.log(this.mEnemyExplosion)
+  //   this.mEnemyExplosion.push(
+  //     new Explosion(this.ctx, 50, 50, this.mEnemys.posX, this.mEnemys.posY)
+  //   );
+  // },
+
+  // generateBenemyExplosion: function() {
+  //   // console.log(this.bEnemyExplosion)
+  //   this.bEnemyExplosion.push(
+  //     new Explosion(this.ctx, 100, 100, this.bEnemys.posX, this.bEnemys.posY)
+  //   );
+  // },
+
   generateEnemys: function() {
-    if (this.framesCounter % 50 === 0)
+    if (this.framesCounter % 70 === 0)
       this.sEnemys.push(
         new Enemy(
           this.ctx,
@@ -159,12 +221,26 @@ const Game = {
   drawAll: function() {
     this.desertBackground.draw();
     this.tClouds.forEach(cloud => cloud.draw());
+    this.firstPower.forEach(powerUp => powerUp.draw(this.framesCounter));
+    this.secondPower.forEach(powerUp => powerUp.draw(this.framesCounter));
     this.player.draw(this.framesCounter);
     this.sEnemys.forEach(enemy => enemy.draw(this.framesCounter));
     this.mEnemys.forEach(enemy => enemy.draw(this.framesCounter));
     this.bEnemys.forEach(enemy => enemy.draw(this.framesCounter));
-    this.firstPower.forEach(powerUp => powerUp.draw(this.framesCounter));
-    this.secondPower.forEach(powerUp => powerUp.draw(this.framesCounter));
+
+    this.playerExplosion.forEach(explosion =>
+      explosion.draw(this.framesCounter)
+    );
+
+    // this.sEnemyExplosion.forEach(explosion =>
+    //   explosion.draw(this.framesCounter)
+    // );
+    // this.mEnemyExplosion.forEach(explosion =>
+    //   explosion.draw(this.framesCounter)
+    // );
+    // this.bEnemyExplosion.forEach(explosion =>
+    //   explosion.draw(this.framesCounter)
+    // );
     this.sClouds.forEach(cloud => cloud.draw());
   },
 
@@ -210,10 +286,10 @@ const Game = {
 
   clearPowerUps: function() {
     this.firstPower = this.firstPower.filter(
-      powerUp => powerUp.posY - powerUp.height <= this.height
+      powerUp => powerUp.posY <= this.height
     );
     this.secondPower = this.secondPower.filter(
-      powerUp => powerUp.posY - powerUp.height <= this.height
+      powerUp => powerUp.posY <= this.height
     );
   },
 
@@ -221,13 +297,59 @@ const Game = {
     this.ctx.clearRect(0, 0, this.width, this.height);
   },
 
-  isCollision: function() {
-    return this.sEnemys.some(enemy => (this.player.posX + this.player.width > enemy.posX && enemy.posX + enemy.width > this.player.posX && this.player.posY + this.player.height > enemy.posY && enemy.posY + enemy.height > this.player.posY ))
-    // return this.mEnemys.some(enemy => (this.player.posX + this.player.width > enemy.posX && enemy.posX + enemy.width > this.player.posX && this.player.posY + this.player.height > enemy.posY && enemy.posY + enemy.height > this.player.posY ))
-    // return this.bEnemys.some(enemy => (this.player.posX + this.player.width > enemy.posX && enemy.posX + enemy.width > this.player.posX && this.player.posY + this.player.height > enemy.posY && enemy.posY + enemy.height > this.player.posY ))
+  isCollisionSmall: function() {
+    return this.sEnemys.some(
+      enemy =>
+        this.player.posX + this.player.width > enemy.posX &&
+        enemy.posX + enemy.width > this.player.posX &&
+        this.player.posY + this.player.height > enemy.posY &&
+        enemy.posY + enemy.height > this.player.posY
+    );
   },
 
+  isCollisionMedium: function() {
+    return this.mEnemys.some(
+      enemy =>
+        this.player.posX + this.player.width > enemy.posX &&
+        enemy.posX + enemy.width > this.player.posX &&
+        this.player.posY + this.player.height > enemy.posY &&
+        enemy.posY + enemy.height > this.player.posY
+    );
+  },
+
+  isCollisionBig: function() {
+    return this.bEnemys.some(
+      enemy =>
+        this.player.posX + this.player.width > enemy.posX &&
+        enemy.posX + enemy.width > this.player.posX &&
+        this.player.posY + this.player.height > enemy.posY &&
+        enemy.posY + enemy.height > this.player.posY
+    );
+  },
+
+  // isCollisionBulletSmallEnemy: function() {
+  //   this.player.bullets.forEach(bullet =>
+  //     this.sEnemys.forEach(enemy => {
+  //       if (bullet.posX > enemy.posX && bullet.posY > enemy.posY) {
+  //         this.generateSenemyExplosion();
+  //       }
+  //     })
+  //   );
+  // },
+
+  // isCollisionBullet: function() {
+
+  // },
+
+  // firstPowerUp: function() {
+  //   console.log("powerUp");
+  // },
+
+  // secondPowerUp: function() {
+  //   console.log("powerUp");
+  // },
+
   gameOver: function() {
-    clearInterval(this.interval)
+    clearInterval(this.interval);
   }
 };

@@ -11,15 +11,15 @@ class Enemy {
     this.framesIndex = 0;
 
     this.posX = posX;
-    this.posY = posY - height;
+    this.posY = posY;
 
     this.vY = speed;
 
     this.enemyType = enemyType;
 
-    this.sBullets = [];
-    this.mBullets = [];
-    this.bBullets = [];
+    // this.sBullets = [];
+    // this.mBullets = [];
+    // this.bBullets = [];
   }
 
   draw(framesCounter) {
@@ -30,14 +30,14 @@ class Enemy {
       Math.floor(this.image.width / this.frames),
       this.image.height,
       this.posX,
-      this.posY,
+      this.posY - this.height,
       this.width,
       this.height
     );
     // this.clearBullets();
-    this.sBullets.forEach(bullet => bullet.draw(framesCounter));
-    this.mBullets.forEach(bullet => bullet.draw(framesCounter));
-    this.bBullets.forEach(bullet => bullet.draw(framesCounter));
+    // this.sBullets.forEach(bullet => bullet.draw(framesCounter));
+    // this.mBullets.forEach(bullet => bullet.draw(framesCounter));
+    // this.bBullets.forEach(bullet => bullet.draw(framesCounter));
     this.animate(framesCounter);
   }
 
@@ -48,68 +48,56 @@ class Enemy {
 
   move() {
     this.posY += this.vY;
-    this.sBullets.forEach(bullet => bullet.move());
-    this.mBullets.forEach(bullet => bullet.move());
-    this.bBullets.forEach(bullet => bullet.move());
+    // this.sBullets.forEach(bullet => bullet.move());
+    // this.mBullets.forEach(bullet => bullet.move());
+    // this.bBullets.forEach(bullet => bullet.move());
   }
 
-  generateBullets() {
-    if (this.framesCounter % 50 === 0 && this.enemyType === "small")
-      this.sBullets.push(
-        new Bullet(
-          this.ctx,
-          5,
-          13,
-          "./img/laser-bolt-1.png",
-          this.posX,
-          this.posY,
-          this.width,
-          this.height,
-          1,
-          "enemy"
-        )
-      );
-    if (this.framesCounter % 50 === 0 && this.enemyType === "medium")
-      this.mBullets.push(
-        new Bullet(
-          this.ctx,
-          5,
-          13,
-          "./img/laser-bolt-1.png",
-          this.posX,
-          this.posY,
-          this.width,
-          this.height,
-          2,
-          "enemy"
-        )
-      );
-    if (this.framesCounter % 50 === 0 && this.enemyType === "big")
-      this.bBullets.push(
-        new Bullet(
-          this.ctx,
-          5,
-          13,
-          "./img/laser-bolt-1.png",
-          this.posX,
-          this.posY,
-          this.width,
-          this.height,
-          3,
-          "enemy"
-        )
-      );
-  }
-
-//   clearBullets() {
-//     this.sBullets = this.sBullets.filter(
-//       bullet => bullet.posY + bullet.height >= this.height
-//     );
-//     this.mBullets = this.mBullets.filter(
-//       bullet => bullet.posY + bullet.height >= this.height
-//     );
-//     this.bBullets = this.bBullets.filter(
-//       bullet => bullet.posY + bullet.height >= this.height
-//     );
-//   }
+  // generateBullets() {
+  //   if (this.framesCounter % 50 === 0 && this.enemyType === "small")
+  //     this.sBullets.push(
+  //       new Bullet(
+  //         this.ctx,
+  //         5,
+  //         13,
+  //         "./img/laser-bolt-1.png",
+  //         this.posX,
+  //         this.posY,
+  //         this.width,
+  //         this.height,
+  //         1,
+  //         "enemy"
+  //       )
+  //     );
+  //   if (this.framesCounter % 50 === 0 && this.enemyType === "medium")
+  //     this.mBullets.push(
+  //       new Bullet(
+  //         this.ctx,
+  //         5,
+  //         13,
+  //         "./img/laser-bolt-1.png",
+  //         this.posX,
+  //         this.posY,
+  //         this.width,
+  //         this.height,
+  //         2,
+  //         "enemy"
+  //       )
+  //     );
+  //   if (this.framesCounter % 50 === 0 && this.enemyType === "big")
+  //     this.bBullets.push(
+  //       new Bullet(
+  //         this.ctx,
+  //         5,
+  //         13,
+  //         "./img/laser-bolt-1.png",
+  //         this.posX,
+  //         this.posY,
+  //         this.width,
+  //         this.height,
+  //         3,
+  //         "enemy"
+  //       )
+  //     );
+  // }
 }

@@ -55,5 +55,4 @@ class Bullet {
       this.posY += this.vY;
     }
    }
-
 }

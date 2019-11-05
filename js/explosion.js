@@ -1,19 +1,17 @@
-class Powerup {
-  constructor(ctx, width, heigth, image, posX, posY, speed) {
+class Explosion {
+  constructor(ctx, width, heigth, playerX, playerY) {
     this.ctx = ctx;
     this.width = width;
     this.heigth = heigth;
 
     this.image = new Image();
-    this.image.src = image;
+    this.image.src = "./img/explosion.png";
 
-    this.frames = 2;
+    this.posX = playerX;
+    this.posY = playerY;
+
     this.framesIndex = 0;
-
-    this.posX = posX;
-    this.posY = posY;
-
-    this.vY = speed;
+    this.frames = 5;
   }
 
   draw(framesCounter) {
@@ -23,8 +21,8 @@ class Powerup {
       0,
       Math.floor(this.image.width / this.frames),
       this.image.height,
-      this.posX,
-      this.posY,
+      this.posX - 7,
+      this.posY - 7,
       this.width,
       this.heigth
     );
@@ -33,10 +31,5 @@ class Powerup {
 
   animate(framesCounter) {
     if (framesCounter % 10 === 0) this.framesIndex++;
-    if (this.framesIndex > 1) this.framesIndex = 0;
-  }
-
-  move() {
-    this.posY += this.vY;
   }
 }
