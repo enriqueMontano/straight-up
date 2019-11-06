@@ -16,10 +16,6 @@ class Enemy {
     this.vY = speed;
 
     this.enemyType = enemyType;
-
-    // this.sBullets = [];
-    // this.mBullets = [];
-    // this.bBullets = [];
   }
 
   draw(framesCounter) {
@@ -34,10 +30,6 @@ class Enemy {
       this.width,
       this.height
     );
-    // this.clearBullets();
-    // this.sBullets.forEach(bullet => bullet.draw(framesCounter));
-    // this.mBullets.forEach(bullet => bullet.draw(framesCounter));
-    // this.bBullets.forEach(bullet => bullet.draw(framesCounter));
     this.animate(framesCounter);
   }
 
@@ -48,59 +40,5 @@ class Enemy {
 
   move() {
     this.posY += this.vY;
-    // console.log(this.posX)
-    // console.log(this.posY)
-
-    // this.sBullets.forEach(bullet => bullet.move());
-    // this.mBullets.forEach(bullet => bullet.move());
-    // this.bBullets.forEach(bullet => bullet.move());
   }
-
-  // generateBullets() {
-  //   if (this.framesCounter % 50 === 0 && this.enemyType === "small")
-  //     this.sBullets.push(
-  //       new Bullet(
-  //         this.ctx,
-  //         5,
-  //         13,
-  //         "./img/laser-bolt-1.png",
-  //         this.posX,
-  //         this.posY,
-  //         this.width,
-  //         this.height,
-  //         1,
-  //         "enemy"
-  //       )
-  //     );
-  //   if (this.framesCounter % 50 === 0 && this.enemyType === "medium")
-  //     this.mBullets.push(
-  //       new Bullet(
-  //         this.ctx,
-  //         5,
-  //         13,
-  //         "./img/laser-bolt-1.png",
-  //         this.posX,
-  //         this.posY,
-  //         this.width,
-  //         this.height,
-  //         2,
-  //         "enemy"
-  //       )
-  //     );
-  //   if (this.framesCounter % 50 === 0 && this.enemyType === "big")
-  //     this.bBullets.push(
-  //       new Bullet(
-  //         this.ctx,
-  //         5,
-  //         13,
-  //         "./img/laser-bolt-1.png",
-  //         this.posX,
-  //         this.posY,
-  //         this.width,
-  //         this.height,
-  //         3,
-  //         "enemy"
-  //       )
-  //     );
-  // }
 }

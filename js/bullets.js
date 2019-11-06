@@ -48,11 +48,11 @@ class Bullet {
   }
 
   move() {
-    if(this.playerType === "player"){
+    if (this.playerType === "player") {
       this.posY -= this.vY;
     }
-    if(this.playerType === "enemy"){
+    if (this.playerType === "enemy") {
       this.posY += this.vY;
     }
-   }
+  }
 }

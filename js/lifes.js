@@ -9,7 +9,7 @@ const Lifes = {
 
   draw: function(life) {
     this.ctx.fillStyle = "white";
-    this.ctx.font = "10px sans-serif";
-    this.ctx.fillText("ENERGY: " + life, 5, 13);
+    this.ctx.font = "20px sans-serif";
+    this.ctx.fillText("ENERGY: " + life, 5, 26);
   }
 };

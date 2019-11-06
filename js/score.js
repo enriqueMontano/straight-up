@@ -9,7 +9,7 @@ const Score = {
 
   draw: function(score) {
     this.ctx.fillStyle = "white";
-    this.ctx.font = "10px sans-serif";
-    this.ctx.fillText("SCORE: " + score, 5, 265);
+    this.ctx.font = "20px sans-serif";
+    this.ctx.fillText("SCORE: " + score, 5, 530);
   }
 };

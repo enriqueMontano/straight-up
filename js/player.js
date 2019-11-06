@@ -25,7 +25,7 @@ class Player {
 
     this.posX = posX;
     this.posY = posY;
-    this.speed = 2;
+    this.speed = 4;
 
     this.keys = keys;
     this.bullets = [];
@@ -128,14 +128,14 @@ class Player {
     this.bullets.push(
       new Bullet(
         this.ctx,
-        5,
-        13,
+        10,
+        26,
         "./img/laser-bolt-2.png",
         this.posX,
         this.posY,
         this.width,
         this.height,
-        1,
+        4,
         "player"
       )
     );

@@ -18,8 +18,8 @@ const Game = {
   init: function() {
     this.canvas = document.getElementById("canvas");
     this.ctx = this.canvas.getContext("2d");
-    this.width = 256;
-    this.height = 272;
+    this.width = 512;
+    this.height = 544;
     this.canvas.width = this.width;
     this.canvas.height = this.height;
 
@@ -53,7 +53,7 @@ const Game = {
       this.isCollisionMedium();
       this.isCollisionBig();
 
-      if(this.life < 1) this.gameOver();
+      if (this.life < 1) this.gameOver();
       if (this.framesCounter > 1000) this.framesCounter = 0;
     }, 1000 / this.fps);
   },
@@ -61,17 +61,17 @@ const Game = {
   reset: function() {
     this.desertBackground = new Background(
       this.ctx,
-      256,
-      272,
+      512,
+      544,
       "./img/desert-backgorund.png",
       0,
       0,
-      1
+      2
     );
     this.player = new Player(
       this.ctx,
-      16,
-      24,
+      32,
+      48,
       "./img/ship.png",
       this.width / 2 - 8,
       this.height - 50,
@@ -102,81 +102,80 @@ const Game = {
   generateClouds: function() {
     if (this.framesCounter % 150 === 0)
       this.tClouds.push(
-        new Clouds(this.ctx, 256, 103, "./img/clouds-transparent.png", 0, 0, 3)
+        new Clouds(this.ctx, 512, 206, "./img/clouds-transparent.png", 0, 0, 6)
       );
 
     if (this.framesCounter % 350 === 0)
       this.sClouds.push(
-        new Clouds(this.ctx, 512, 206, "./img/clouds.png", 0, 0, 6)
+        new Clouds(this.ctx, 1024, 412, "./img/clouds.png", 0, 0, 12)
       );
   },
 
   generateEnemys: function() {
-    if (this.framesCounter % 70 === 0)
+    if (this.framesCounter % 50 === 0)
       this.sEnemys.push(
         new Enemy(
           this.ctx,
-          16,
-          16,
+          32,
+          32,
           "./img/enemy-small.png",
-          this.width / 2,
+          this.randomIntFromInterval(),
           0,
-          0.5,
-          1,
+          6,
           "small"
         )
       );
-    if (this.framesCounter % 300 === 0)
+    if (this.framesCounter % 100 === 0)
       this.mEnemys.push(
         new Enemy(
           this.ctx,
+          64,
           32,
-          16,
           "./img/enemy-medium.png",
-          this.width / 2 - 50,
+          this.randomIntFromInterval(),
           2,
-          2,
+          4,
           "medium"
         )
       );
-    if (this.framesCounter % 150 === 0)
+    if (this.framesCounter % 200 === 0)
       this.bEnemys.push(
         new Enemy(
           this.ctx,
-          16,
-          16,
+          64,
+          64,
           "./img/enemy-big.png",
-          this.width / 2 + 50,
+          this.randomIntFromInterval(),
           3,
-          3,
+          6,
           "big"
         )
       );
   },
 
   generatePowerUps: function() {
-    if (this.framesCounter % 300 === 0)
+    if (this.framesCounter % 1500 === 0)
       this.firstPower.push(
         new Powerup(
           this.ctx,
-          8,
-          8,
+          16,
+          16,
           "./img/power-up-1.png",
-          this.width / 2 - 100,
+          this.randomIntFromInterval(),
           0,
-          1
+          2
         )
       );
-    if (this.framesCounter % 300 === 0)
+    if (this.framesCounter % 2000 === 0)
       this.secondPower.push(
         new Powerup(
           this.ctx,
-          8,
-          8,
+          16,
+          16,
           "./img/power-up-2.png",
-          this.width / 2 + 100,
+          this.randomIntFromInterval(),
           0,
-          1
+          2
         )
       );
   },
@@ -217,13 +216,13 @@ const Game = {
     this.firstPower.forEach(powerUp => powerUp.move());
     this.secondPower.forEach(powerUp => powerUp.move());
     this.sClouds.forEach(cloud => cloud.move());
-    // console.log(this.tClouds);
-    // console.log(this.sClouds);
-    // console.log(this.sEnemys);
-    // console.log(this.mEnemys);
-    // console.log(this.bEnemys);
-    // console.log(this.firstPower);
-    // console.log(this.secondPower);
+    console.log(this.tClouds);
+    console.log(this.sClouds);
+    console.log(this.sEnemys);
+    console.log(this.mEnemys);
+    console.log(this.bEnemys);
+    console.log(this.firstPower);
+    console.log(this.secondPower);
   },
 
   clearClouds: function() {
@@ -270,11 +269,15 @@ const Game = {
         ) {
           this.score = this.score + 2;
           this.sEnemyExplosion.push(
-            new Explosion(this.ctx, 30, 30, enemy.posX, enemy.posY)
+            new Explosion(this.ctx, 60, 60, enemy.posX, enemy.posY)
           );
           let index = this.sEnemys.indexOf(enemy);
           if (index > -1) {
             this.sEnemys.splice(index, 1);
+          }
+          let index2 = this.player.bullets.indexOf(bullet);
+          if (index2 > -1) {
+            this.player.bullets.splice(index2, 1);
           }
         }
       })
@@ -291,11 +294,15 @@ const Game = {
         ) {
           this.score = this.score + 5;
           this.mEnemyExplosion.push(
-            new Explosion(this.ctx, 50, 50, enemy.posX, enemy.posY)
+            new Explosion(this.ctx, 100, 100, enemy.posX, enemy.posY)
           );
           let index = this.mEnemys.indexOf(enemy);
           if (index > -1) {
             this.mEnemys.splice(index, 1);
+          }
+          let index2 = this.player.bullets.indexOf(bullet);
+          if (index2 > -1) {
+            this.player.bullets.splice(index2, 1);
           }
         }
       })
@@ -312,11 +319,15 @@ const Game = {
         ) {
           this.score = this.score + 10;
           this.bEnemyExplosion.push(
-            new Explosion(this.ctx, 20, 20, enemy.posX, enemy.posY)
+            new Explosion(this.ctx, 80, 80, enemy.posX, enemy.posY)
           );
           let index = this.bEnemys.indexOf(enemy);
           if (index > -1) {
             this.bEnemys.splice(index, 1);
+          }
+          let index2 = this.player.bullets.indexOf(bullet);
+          if (index2 > -1) {
+            this.player.bullets.splice(index2, 1);
           }
         }
       })
@@ -346,6 +357,7 @@ const Game = {
         this.player.posX > powerUp.posX &&
         this.player.posX < powerUp.posX + this.player.width
       ) {
+        this.life++;
         let index = this.secondPower.indexOf(powerUp);
         if (index > -1) {
           this.secondPower.splice(index, 1);
@@ -363,7 +375,7 @@ const Game = {
       ) {
         this.life--;
         this.playerExplosion.push(
-          new Explosion(this.ctx, 30, 30, this.player.posX, this.player.posY)
+          new Explosion(this.ctx, 60, 60, this.player.posX, this.player.posY)
         );
         let index = this.sEnemys.indexOf(enemy);
         if (index > -1) {
@@ -382,7 +394,7 @@ const Game = {
       ) {
         this.life--;
         this.playerExplosion.push(
-          new Explosion(this.ctx, 30, 30, this.player.posX, this.player.posY)
+          new Explosion(this.ctx, 60, 60, this.player.posX, this.player.posY)
         );
         let index = this.mEnemys.indexOf(enemy);
         if (index > -1) {
@@ -401,7 +413,7 @@ const Game = {
       ) {
         this.life--;
         this.playerExplosion.push(
-          new Explosion(this.ctx, 30, 30, this.player.posX, this.player.posY)
+          new Explosion(this.ctx, 60, 60, this.player.posX, this.player.posY)
         );
         let index = this.bEnemys.indexOf(enemy);
         if (index > -1) {
@@ -413,5 +425,9 @@ const Game = {
 
   gameOver: function() {
     clearInterval(this.interval);
+  },
+
+  randomIntFromInterval: function() {
+    return Math.floor(Math.random() * (this.width - 0)) + 0;
   }
 };
