@@ -12,6 +12,8 @@ const Game = {
     arrowLeft: false,
     space: false
   },
+  score: 0,
+  life: 5,
 
   init: function() {
     this.canvas = document.getElementById("canvas");
@@ -47,15 +49,11 @@ const Game = {
       this.isCollisionFirstPowerUp();
       this.isCollisionSecondPowerUp();
 
-      if (
-        this.isCollisionSmall() ||
-        this.isCollisionMedium() ||
-        this.isCollisionBig()
-      ) {
-        this.generatePlayerExplosion();
-        // this.gameOver();
-      }
+      this.isCollisionSmall();
+      this.isCollisionMedium();
+      this.isCollisionBig();
 
+      if(this.life < 1) this.gameOver();
       if (this.framesCounter > 1000) this.framesCounter = 0;
     }, 1000 / this.fps);
   },
@@ -96,6 +94,9 @@ const Game = {
 
     this.firstPower = [];
     this.secondPower = [];
+
+    Score.init(this.ctx, this.score);
+    Lifes.init(this.ctx, this.life);
   },
 
   generateClouds: function() {
@@ -110,12 +111,6 @@ const Game = {
       );
   },
 
-  generatePlayerExplosion: function() {
-    this.playerExplosion.push(
-      new Explosion(this.ctx, 30, 30, this.player.posX, this.player.posY)
-    );
-  },
-
   generateEnemys: function() {
     if (this.framesCounter % 70 === 0)
       this.sEnemys.push(
@@ -126,7 +121,7 @@ const Game = {
           "./img/enemy-small.png",
           this.width / 2,
           0,
-          1,
+          0.5,
           1,
           "small"
         )
@@ -208,6 +203,8 @@ const Game = {
       explosion.draw(this.framesCounter)
     );
     this.sClouds.forEach(cloud => cloud.draw());
+    Score.draw(this.score);
+    Lifes.draw(this.life);
   },
 
   moveAll: function() {
@@ -263,36 +260,6 @@ const Game = {
     this.ctx.clearRect(0, 0, this.width, this.height);
   },
 
-  isCollisionSmall: function() {
-    return this.sEnemys.some(
-      enemy =>
-        this.player.posX + this.player.width > enemy.posX &&
-        enemy.posX + enemy.width > this.player.posX &&
-        this.player.posY + this.player.height > enemy.posY &&
-        enemy.posY + enemy.height > this.player.posY
-    );
-  },
-
-  isCollisionMedium: function() {
-    return this.mEnemys.some(
-      enemy =>
-        this.player.posX + this.player.width > enemy.posX &&
-        enemy.posX + enemy.width > this.player.posX &&
-        this.player.posY + this.player.height > enemy.posY &&
-        enemy.posY + enemy.height > this.player.posY
-    );
-  },
-
-  isCollisionBig: function() {
-    return this.bEnemys.some(
-      enemy =>
-        this.player.posX + this.player.width > enemy.posX &&
-        enemy.posX + enemy.width > this.player.posX &&
-        this.player.posY + this.player.height > enemy.posY &&
-        enemy.posY + enemy.height > this.player.posY
-    );
-  },
-
   isCollisionSenemy: function() {
     this.player.bullets.forEach(bullet =>
       this.sEnemys.forEach(enemy => {
@@ -301,6 +268,7 @@ const Game = {
           bullet.posX > enemy.posX &&
           bullet.posX < enemy.posX + enemy.width
         ) {
+          this.score = this.score + 2;
           this.sEnemyExplosion.push(
             new Explosion(this.ctx, 30, 30, enemy.posX, enemy.posY)
           );
@@ -321,6 +289,7 @@ const Game = {
           bullet.posX > enemy.posX &&
           bullet.posX < enemy.posX + enemy.width
         ) {
+          this.score = this.score + 5;
           this.mEnemyExplosion.push(
             new Explosion(this.ctx, 50, 50, enemy.posX, enemy.posY)
           );
@@ -341,6 +310,7 @@ const Game = {
           bullet.posX > enemy.posX &&
           bullet.posX < enemy.posX + enemy.width
         ) {
+          this.score = this.score + 10;
           this.bEnemyExplosion.push(
             new Explosion(this.ctx, 20, 20, enemy.posX, enemy.posY)
           );
@@ -360,6 +330,7 @@ const Game = {
         this.player.posX > powerUp.posX &&
         this.player.posX < powerUp.posX + this.player.width
       ) {
+        this.life++;
         let index = this.firstPower.indexOf(powerUp);
         if (index > -1) {
           this.firstPower.splice(index, 1);
@@ -382,6 +353,64 @@ const Game = {
       }
     });
   },
+
+  isCollisionSmall: function() {
+    this.sEnemys.forEach(enemy => {
+      if (
+        this.player.posY < enemy.posY &&
+        this.player.posX > enemy.posX &&
+        this.player.posX < enemy.posX + this.player.width
+      ) {
+        this.life--;
+        this.playerExplosion.push(
+          new Explosion(this.ctx, 30, 30, this.player.posX, this.player.posY)
+        );
+        let index = this.sEnemys.indexOf(enemy);
+        if (index > -1) {
+          this.sEnemys.splice(index, 1);
+        }
+      }
+    });
+  },
+
+  isCollisionMedium: function() {
+    this.mEnemys.forEach(enemy => {
+      if (
+        this.player.posY < enemy.posY &&
+        this.player.posX > enemy.posX &&
+        this.player.posX < enemy.posX + this.player.width
+      ) {
+        this.life--;
+        this.playerExplosion.push(
+          new Explosion(this.ctx, 30, 30, this.player.posX, this.player.posY)
+        );
+        let index = this.mEnemys.indexOf(enemy);
+        if (index > -1) {
+          this.mEnemys.splice(index, 1);
+        }
+      }
+    });
+  },
+
+  isCollisionBig: function() {
+    this.bEnemys.forEach(enemy => {
+      if (
+        this.player.posY < enemy.posY &&
+        this.player.posX > enemy.posX &&
+        this.player.posX < enemy.posX + this.player.width
+      ) {
+        this.life--;
+        this.playerExplosion.push(
+          new Explosion(this.ctx, 30, 30, this.player.posX, this.player.posY)
+        );
+        let index = this.bEnemys.indexOf(enemy);
+        if (index > -1) {
+          this.bEnemys.splice(index, 1);
+        }
+      }
+    });
+  },
+
   gameOver: function() {
     clearInterval(this.interval);
   }
