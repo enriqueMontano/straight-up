@@ -48,6 +48,9 @@ class Enemy {
 
   move() {
     this.posY += this.vY;
+    // console.log(this.posX)
+    // console.log(this.posY)
+
     // this.sBullets.forEach(bullet => bullet.move());
     // this.mBullets.forEach(bullet => bullet.move());
     // this.bBullets.forEach(bullet => bullet.move());

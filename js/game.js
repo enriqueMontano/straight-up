@@ -40,25 +40,31 @@ const Game = {
       this.generateEnemys();
       this.generatePowerUps();
 
+      this.isCollisionSenemy();
+      this.isCollisionMenemy();
+      this.isCollisionBenemy();
+
       if (
         this.isCollisionSmall() ||
         this.isCollisionMedium() ||
         this.isCollisionBig()
       ) {
         this.generatePlayerExplosion();
-        // this.generateSenemyExplosion();
-        // this.generateMenemyExplosion();
-        // this.generateBenemyExplosion();
-
         // this.gameOver();
       }
 
       // if (this.isCollisionFirstPowerUp()) {
-      //   // this.firstPowerUp();
+      //   let index = this.firstPower.indexOf(powerUp);
+      //   if (index > -1) {
+      //     this.firstPower.splice(index, 1);
+      //   }
       // }
 
       // if (this.isCollisionSecondPowerUp()) {
-      //   // this.secondPowerUp();
+      //   let index = this.secondPower.indexOf(powerUp);
+      //   if (index > -1) {
+      //     this.secondPower.splice(index, 1);
+      //   }
       // }
 
       if (this.framesCounter > 1000) this.framesCounter = 0;
@@ -88,9 +94,9 @@ const Game = {
     );
 
     this.playerExplosion = [];
-    // this.sEnemyExplosion = [];
-    // this.mEnemyExplosion = [];
-    // this.bEnemyExplosion = [];
+    this.sEnemyExplosion = [];
+    this.mEnemyExplosion = [];
+    this.bEnemyExplosion = [];
 
     this.sClouds = [];
     this.tClouds = [];
@@ -116,37 +122,10 @@ const Game = {
   },
 
   generatePlayerExplosion: function() {
-    // console.log(this.player.posX);
     this.playerExplosion.push(
       new Explosion(this.ctx, 30, 30, this.player.posX, this.player.posY)
     );
   },
-
-  // generateSenemyExplosion: function() {
-  //   this.sEnemyExplosion.push(
-  //         new Explosion(
-  //           this.ctx,
-  //           30,
-  //           30,
-  //           this.sEnemys.enemy.posX,
-  //           this.sEnemys.enemy.posY
-  //         );
-  //   );
-  // },
-
-  // generateMenemyExplosion: function() {
-  //   // console.log(this.mEnemyExplosion)
-  //   this.mEnemyExplosion.push(
-  //     new Explosion(this.ctx, 50, 50, this.mEnemys.posX, this.mEnemys.posY)
-  //   );
-  // },
-
-  // generateBenemyExplosion: function() {
-  //   // console.log(this.bEnemyExplosion)
-  //   this.bEnemyExplosion.push(
-  //     new Explosion(this.ctx, 100, 100, this.bEnemys.posX, this.bEnemys.posY)
-  //   );
-  // },
 
   generateEnemys: function() {
     if (this.framesCounter % 70 === 0)
@@ -163,7 +142,7 @@ const Game = {
           "small"
         )
       );
-    if (this.framesCounter % 100 === 0)
+    if (this.framesCounter % 300 === 0)
       this.mEnemys.push(
         new Enemy(
           this.ctx,
@@ -192,7 +171,7 @@ const Game = {
   },
 
   generatePowerUps: function() {
-    if (this.framesCounter % 60 === 0)
+    if (this.framesCounter % 300 === 0)
       this.firstPower.push(
         new Powerup(
           this.ctx,
@@ -204,7 +183,7 @@ const Game = {
           1
         )
       );
-    if (this.framesCounter % 120 === 0)
+    if (this.framesCounter % 300 === 0)
       this.secondPower.push(
         new Powerup(
           this.ctx,
@@ -213,7 +192,7 @@ const Game = {
           "./img/power-up-2.png",
           this.width / 2 + 100,
           0,
-          3
+          1
         )
       );
   },
@@ -227,20 +206,18 @@ const Game = {
     this.sEnemys.forEach(enemy => enemy.draw(this.framesCounter));
     this.mEnemys.forEach(enemy => enemy.draw(this.framesCounter));
     this.bEnemys.forEach(enemy => enemy.draw(this.framesCounter));
-
     this.playerExplosion.forEach(explosion =>
       explosion.draw(this.framesCounter)
     );
-
-    // this.sEnemyExplosion.forEach(explosion =>
-    //   explosion.draw(this.framesCounter)
-    // );
-    // this.mEnemyExplosion.forEach(explosion =>
-    //   explosion.draw(this.framesCounter)
-    // );
-    // this.bEnemyExplosion.forEach(explosion =>
-    //   explosion.draw(this.framesCounter)
-    // );
+    this.sEnemyExplosion.forEach(explosion =>
+      explosion.draw(this.framesCounter)
+    );
+    this.mEnemyExplosion.forEach(explosion =>
+      explosion.draw(this.framesCounter)
+    );
+    this.bEnemyExplosion.forEach(explosion =>
+      explosion.draw(this.framesCounter)
+    );
     this.sClouds.forEach(cloud => cloud.draw());
   },
 
@@ -327,26 +304,84 @@ const Game = {
     );
   },
 
-  // isCollisionBulletSmallEnemy: function() {
-  //   this.player.bullets.forEach(bullet =>
-  //     this.sEnemys.forEach(enemy => {
-  //       if (bullet.posX > enemy.posX && bullet.posY > enemy.posY) {
-  //         this.generateSenemyExplosion();
-  //       }
-  //     })
+  isCollisionSenemy: function() {
+    this.player.bullets.forEach(bullet =>
+      this.sEnemys.forEach(enemy => {
+        if (
+          bullet.posY < enemy.posY &&
+          bullet.posX > enemy.posX &&
+          bullet.posX < enemy.posX + enemy.width
+        ) {
+          this.sEnemyExplosion.push(
+            new Explosion(this.ctx, 30, 30, enemy.posX, enemy.posY)
+          );
+          let index = this.sEnemys.indexOf(enemy);
+          if (index > -1) {
+            this.sEnemys.splice(index, 1);
+          }
+        }
+      })
+    );
+  },
+
+  isCollisionMenemy: function() {
+    this.player.bullets.forEach(bullet =>
+      this.mEnemys.forEach(enemy => {
+        if (
+          bullet.posY < enemy.posY &&
+          bullet.posX > enemy.posX &&
+          bullet.posX < enemy.posX + enemy.width
+        ) {
+          this.mEnemyExplosion.push(
+            new Explosion(this.ctx, 50, 50, enemy.posX, enemy.posY)
+          );
+          let index = this.mEnemys.indexOf(enemy);
+          if (index > -1) {
+            this.mEnemys.splice(index, 1);
+          }
+        }
+      })
+    );
+  },
+
+  isCollisionBenemy: function() {
+    this.player.bullets.forEach(bullet =>
+      this.bEnemys.forEach(enemy => {
+        if (
+          bullet.posY < enemy.posY &&
+          bullet.posX > enemy.posX &&
+          bullet.posX < enemy.posX + enemy.width
+        ) {
+          this.bEnemyExplosion.push(
+            new Explosion(this.ctx, 20, 20, enemy.posX, enemy.posY)
+          );
+          let index = this.bEnemys.indexOf(enemy);
+          if (index > -1) {
+            this.bEnemys.splice(index, 1);
+          }
+        }
+      })
+    );
+  },
+
+  // isCollisionFirstPowerUp: function() {
+  //   return this.firstPower.some(
+  //     powerUp =>
+  //       this.player.posX + this.player.width > powerUp.posX &&
+  //       powerUp.posX + powerUp.width > this.player.posX &&
+  //       this.player.posY + this.player.height > powerUp.posY &&
+  //       powerUp.posY + powerUp.height > this.player.posY
   //   );
   // },
 
-  // isCollisionBullet: function() {
-
-  // },
-
-  // firstPowerUp: function() {
-  //   console.log("powerUp");
-  // },
-
-  // secondPowerUp: function() {
-  //   console.log("powerUp");
+  // isCollisionSecondPowerUp: function() {
+  //   return this.secondPower.some(
+  //     powerUp =>
+  //       this.player.posX + this.player.width > powerUp.posX &&
+  //       powerUp.posX + powerUp.width > this.player.posX &&
+  //       this.player.posY + this.player.height > powerUp.posY &&
+  //       powerUp.posY + powerUp.height > this.player.posY
+  //   );
   // },
 
   gameOver: function() {
