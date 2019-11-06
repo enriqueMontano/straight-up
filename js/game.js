@@ -44,6 +44,9 @@ const Game = {
       this.isCollisionMenemy();
       this.isCollisionBenemy();
 
+      this.isCollisionFirstPowerUp();
+      this.isCollisionSecondPowerUp();
+
       if (
         this.isCollisionSmall() ||
         this.isCollisionMedium() ||
@@ -52,20 +55,6 @@ const Game = {
         this.generatePlayerExplosion();
         // this.gameOver();
       }
-
-      // if (this.isCollisionFirstPowerUp()) {
-      //   let index = this.firstPower.indexOf(powerUp);
-      //   if (index > -1) {
-      //     this.firstPower.splice(index, 1);
-      //   }
-      // }
-
-      // if (this.isCollisionSecondPowerUp()) {
-      //   let index = this.secondPower.indexOf(powerUp);
-      //   if (index > -1) {
-      //     this.secondPower.splice(index, 1);
-      //   }
-      // }
 
       if (this.framesCounter > 1000) this.framesCounter = 0;
     }, 1000 / this.fps);
@@ -364,26 +353,35 @@ const Game = {
     );
   },
 
-  // isCollisionFirstPowerUp: function() {
-  //   return this.firstPower.some(
-  //     powerUp =>
-  //       this.player.posX + this.player.width > powerUp.posX &&
-  //       powerUp.posX + powerUp.width > this.player.posX &&
-  //       this.player.posY + this.player.height > powerUp.posY &&
-  //       powerUp.posY + powerUp.height > this.player.posY
-  //   );
-  // },
+  isCollisionFirstPowerUp: function() {
+    this.firstPower.forEach(powerUp => {
+      if (
+        this.player.posY < powerUp.posY &&
+        this.player.posX > powerUp.posX &&
+        this.player.posX < powerUp.posX + this.player.width
+      ) {
+        let index = this.firstPower.indexOf(powerUp);
+        if (index > -1) {
+          this.firstPower.splice(index, 1);
+        }
+      }
+    });
+  },
 
-  // isCollisionSecondPowerUp: function() {
-  //   return this.secondPower.some(
-  //     powerUp =>
-  //       this.player.posX + this.player.width > powerUp.posX &&
-  //       powerUp.posX + powerUp.width > this.player.posX &&
-  //       this.player.posY + this.player.height > powerUp.posY &&
-  //       powerUp.posY + powerUp.height > this.player.posY
-  //   );
-  // },
-
+  isCollisionSecondPowerUp: function() {
+    this.secondPower.forEach(powerUp => {
+      if (
+        this.player.posY < powerUp.posY &&
+        this.player.posX > powerUp.posX &&
+        this.player.posX < powerUp.posX + this.player.width
+      ) {
+        let index = this.secondPower.indexOf(powerUp);
+        if (index > -1) {
+          this.secondPower.splice(index, 1);
+        }
+      }
+    });
+  },
   gameOver: function() {
     clearInterval(this.interval);
   }
