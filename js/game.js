@@ -47,7 +47,7 @@ const Game = {
       this.isCollisionBenemy();
 
       this.isCollisionFirstPowerUp();
-      this.isCollisionSecondPowerUp();
+      // this.isCollisionSecondPowerUp();
 
       this.isCollisionSmall();
       this.isCollisionMedium();
@@ -93,7 +93,7 @@ const Game = {
     this.bEnemys = [];
 
     this.firstPower = [];
-    this.secondPower = [];
+    // this.secondPower = [];
 
     Score.init(this.ctx, this.score);
     Lifes.init(this.ctx, this.life);
@@ -121,8 +121,10 @@ const Game = {
           "./img/enemy-small.png",
           this.randomIntFromInterval(),
           0,
-          6,
-          "small"
+          4,
+          "small",
+          this.width,
+          this.height
         )
       );
     if (this.framesCounter % 100 === 0)
@@ -134,8 +136,10 @@ const Game = {
           "./img/enemy-medium.png",
           this.randomIntFromInterval(),
           2,
-          4,
-          "medium"
+          6,
+          "medium",
+          this.width,
+          this.height
         )
       );
     if (this.framesCounter % 200 === 0)
@@ -147,14 +151,16 @@ const Game = {
           "./img/enemy-big.png",
           this.randomIntFromInterval(),
           3,
-          6,
-          "big"
+          7,
+          "big",
+          this.width,
+          this.height
         )
       );
   },
 
   generatePowerUps: function() {
-    if (this.framesCounter % 1500 === 0)
+    if (this.framesCounter % 1000 === 0)
       this.firstPower.push(
         new Powerup(
           this.ctx,
@@ -166,25 +172,25 @@ const Game = {
           2
         )
       );
-    if (this.framesCounter % 2000 === 0)
-      this.secondPower.push(
-        new Powerup(
-          this.ctx,
-          16,
-          16,
-          "./img/power-up-2.png",
-          this.randomIntFromInterval(),
-          0,
-          2
-        )
-      );
+    // if (this.framesCounter % 1200 === 0)
+    //   this.secondPower.push(
+    //     new Powerup(
+    //       this.ctx,
+    //       16,
+    //       16,
+    //       "./img/power-up-2.png",
+    //       this.randomIntFromInterval(),
+    //       0,
+    //       2
+    //     )
+    //   );
   },
 
   drawAll: function() {
     this.desertBackground.draw();
     this.tClouds.forEach(cloud => cloud.draw());
     this.firstPower.forEach(powerUp => powerUp.draw(this.framesCounter));
-    this.secondPower.forEach(powerUp => powerUp.draw(this.framesCounter));
+    // this.secondPower.forEach(powerUp => powerUp.draw(this.framesCounter));
     this.player.draw(this.framesCounter);
     this.sEnemys.forEach(enemy => enemy.draw(this.framesCounter));
     this.mEnemys.forEach(enemy => enemy.draw(this.framesCounter));
@@ -212,17 +218,17 @@ const Game = {
     this.player.move();
     this.sEnemys.forEach(enemy => enemy.move());
     this.mEnemys.forEach(enemy => enemy.move());
-    this.bEnemys.forEach(enemy => enemy.move());
+    this.bEnemys.forEach(enemy => enemy.chasePlayerMovement(this.player.posX));
     this.firstPower.forEach(powerUp => powerUp.move());
-    this.secondPower.forEach(powerUp => powerUp.move());
+    // this.secondPower.forEach(powerUp => powerUp.move());
     this.sClouds.forEach(cloud => cloud.move());
-    console.log(this.tClouds);
-    console.log(this.sClouds);
-    console.log(this.sEnemys);
-    console.log(this.mEnemys);
-    console.log(this.bEnemys);
-    console.log(this.firstPower);
-    console.log(this.secondPower);
+    // console.log(this.tClouds);
+    // console.log(this.sClouds);
+    // console.log(this.sEnemys);
+    // console.log(this.mEnemys);
+    // console.log(this.bEnemys);
+    // console.log(this.firstPower);
+    // console.log(this.secondPower);
   },
 
   clearClouds: function() {
@@ -250,9 +256,9 @@ const Game = {
     this.firstPower = this.firstPower.filter(
       powerUp => powerUp.posY <= this.height
     );
-    this.secondPower = this.secondPower.filter(
-      powerUp => powerUp.posY <= this.height
-    );
+    // this.secondPower = this.secondPower.filter(
+    //   powerUp => powerUp.posY <= this.height
+    // );
   },
 
   clear: function() {
@@ -350,21 +356,21 @@ const Game = {
     });
   },
 
-  isCollisionSecondPowerUp: function() {
-    this.secondPower.forEach(powerUp => {
-      if (
-        this.player.posY < powerUp.posY &&
-        this.player.posX > powerUp.posX &&
-        this.player.posX < powerUp.posX + this.player.width
-      ) {
-        this.life++;
-        let index = this.secondPower.indexOf(powerUp);
-        if (index > -1) {
-          this.secondPower.splice(index, 1);
-        }
-      }
-    });
-  },
+  // isCollisionSecondPowerUp: function() {
+  //   this.secondPower.forEach(powerUp => {
+  //     if (
+  //       this.player.posY < powerUp.posY &&
+  //       this.player.posX > powerUp.posX &&
+  //       this.player.posX < powerUp.posX + this.player.width
+  //     ) {
+  //       this.life++;
+  //       let index = this.secondPower.indexOf(powerUp);
+  //       if (index > -1) {
+  //         this.secondPower.splice(index, 1);
+  //       }
+  //     }
+  //   });
+  // },
 
   isCollisionSmall: function() {
     this.sEnemys.forEach(enemy => {
