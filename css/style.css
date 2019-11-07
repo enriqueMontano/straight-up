@@ -4,6 +4,7 @@ body {
   padding: 0;
   background: black;
   font-size: 10px;
+  background-image: url("../img/background.png");
 }
 
 body {
@@ -30,7 +31,7 @@ body {
 
 #image {
   /* width: 900px; */
-  height: 90vh;
+  height: 100vh;
 }
 
 #start-game {
@@ -44,6 +45,7 @@ body {
   height: 544px;
   background-image: url("../img/title-game.png");
   border-radius: 3%;
+  font-family: Ar;
 }
 
 #game-over{

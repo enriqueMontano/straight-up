@@ -31,6 +31,9 @@ class Player {
     this.bullets = [];
 
     this.setListeners();
+
+    this.sound = new Audio();
+    this.sound.src = "./audio/shoot.mp3";
   }
 
   draw(framesCounter) {
@@ -114,6 +117,7 @@ class Player {
       if (e.keyCode === 32) {
         this.keys.space = true;
         this.shoot();
+        this.sound.play();
       }
     });
     document.addEventListener("keyup", e => {

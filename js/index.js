@@ -1,7 +1,5 @@
-// window.onload = function() {
   function start(){
-  Game.init();
-  document.querySelector('#canvas').style.display = "flex"
-  document.querySelector('#game-over').style.display = "none"
+    Game.init();
+      document.querySelector('#canvas').style.display = "flex";
+      document.querySelector('#game-over').style.display = "none";
   }
-// }

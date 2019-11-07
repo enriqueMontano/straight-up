@@ -5,6 +5,10 @@ const Game = {
   height: undefined,
   fps: 60,
   framesCounter: 0,
+  
+  score: 0,
+  life: 5,
+  
   playerKeys: {
     arrowUp: false,
     arrowRight: false,
@@ -12,12 +16,11 @@ const Game = {
     arrowLeft: false,
     space: false
   },
-  score: 0,
-  life: 5,
 
   init: function() {
     this.canvas = document.getElementById("canvas");
     this.ctx = this.canvas.getContext("2d");
+   
     this.width = 512;
     this.height = 544;
     this.canvas.width = this.width;
@@ -29,16 +32,14 @@ const Game = {
   start: function() {
     this.reset();
     this.life = 5;
+    this.musicGame.play();
     this.interval = setInterval(() => {
       this.framesCounter++;
 
       this.clear();
       this.drawAll();
       this.moveAll();
-  
-      this.clearClouds();
-      this.clearEnemys();
-      this.clearPowerUps();
+
       this.generateClouds();
       this.generateEnemys();
       this.generatePowerUps();
@@ -46,17 +47,16 @@ const Game = {
       this.isCollisionSenemy();
       this.isCollisionMenemy();
       this.isCollisionBenemy();
-
       this.isCollisionFirstPowerUp();
-      // this.isCollisionSecondPowerUp();
-
       this.isCollisionSmall();
       this.isCollisionMedium();
       this.isCollisionBig();
 
-      if (this.life < 1) {
-        this.gameOver();
-      }
+      this.clearClouds();
+      this.clearEnemys();
+      this.clearPowerUps();
+
+      if (this.life < 1) this.gameOver();
       if (this.framesCounter > 1000) this.framesCounter = 0;
     }, 1000 / this.fps);
   },
@@ -71,6 +71,7 @@ const Game = {
       0,
       2
     );
+
     this.player = new Player(
       this.ctx,
       32,
@@ -83,11 +84,6 @@ const Game = {
       this.height
     );
 
-    this.playerExplosion = [];
-    this.sEnemyExplosion = [];
-    this.mEnemyExplosion = [];
-    this.bEnemyExplosion = [];
-
     this.sClouds = [];
     this.tClouds = [];
 
@@ -96,7 +92,32 @@ const Game = {
     this.bEnemys = [];
 
     this.firstPower = [];
-    // this.secondPower = [];
+
+    this.playerExplosion = [];
+    this.sEnemyExplosion = [];
+    this.mEnemyExplosion = [];
+    this.bEnemyExplosion = [];
+
+    this.musicGame = new Audio();
+    this.musicGame.src = "./audio/Abandoned-Hopes.mp3";
+
+    this.playerExplosionSound = new Audio();
+    this.playerExplosionSound.src = "./audio/player explosion.mp3";
+
+    this.sEnemyExplosionSound = new Audio();
+    this.sEnemyExplosionSound.src = "./audio/senemy-explosion.mp3";
+
+    this.mEnemyExplosionSound = new Audio();
+    this.mEnemyExplosionSound.src = "./audio/menemy-explosion.mp3";
+
+    this.bEnemyExplosionSound = new Audio();
+    this.bEnemyExplosionSound.src = "./audio/benemy-explosion.mp3";
+
+    this.powerUpSound = new Audio();
+    this.powerUpSound.src = "./audio/power-up.mp3";
+
+    this.playerDeathSound = new Audio();
+    this.playerDeathSound.src = "./audio/player-death.mp3";
 
     Score.init(this.ctx, this.score);
     Lifes.init(this.ctx, this.life);
@@ -126,8 +147,7 @@ const Game = {
           0,
           4,
           "small",
-          this.width,
-          this.height
+          2
         )
       );
     if (this.framesCounter % 100 === 0)
@@ -141,10 +161,10 @@ const Game = {
           2,
           6,
           "medium",
-          this.width,
-          this.height
+          4
         )
       );
+
     if (this.framesCounter % 200 === 0)
       this.bEnemys.push(
         new Enemy(
@@ -156,8 +176,7 @@ const Game = {
           3,
           7,
           "big",
-          this.width,
-          this.height
+          6
         )
       );
   },
@@ -175,25 +194,12 @@ const Game = {
           2
         )
       );
-    // if (this.framesCounter % 1200 === 0)
-    //   this.secondPower.push(
-    //     new Powerup(
-    //       this.ctx,
-    //       16,
-    //       16,
-    //       "./img/power-up-2.png",
-    //       this.randomIntFromInterval(),
-    //       0,
-    //       2
-    //     )
-    //   );
   },
 
   drawAll: function() {
     this.desertBackground.draw();
     this.tClouds.forEach(cloud => cloud.draw());
     this.firstPower.forEach(powerUp => powerUp.draw(this.framesCounter));
-    // this.secondPower.forEach(powerUp => powerUp.draw(this.framesCounter));
     this.player.draw(this.framesCounter);
     this.sEnemys.forEach(enemy => enemy.draw(this.framesCounter));
     this.mEnemys.forEach(enemy => enemy.draw(this.framesCounter));
@@ -223,7 +229,6 @@ const Game = {
     this.mEnemys.forEach(enemy => enemy.move());
     this.bEnemys.forEach(enemy => enemy.chasePlayerMovement(this.player.posX));
     this.firstPower.forEach(powerUp => powerUp.move());
-    // this.secondPower.forEach(powerUp => powerUp.move());
     this.sClouds.forEach(cloud => cloud.move());
     // console.log(this.tClouds);
     // console.log(this.sClouds);
@@ -259,9 +264,6 @@ const Game = {
     this.firstPower = this.firstPower.filter(
       powerUp => powerUp.posY <= this.height
     );
-    // this.secondPower = this.secondPower.filter(
-    //   powerUp => powerUp.posY <= this.height
-    // );
   },
 
   clear: function() {
@@ -280,6 +282,7 @@ const Game = {
           this.sEnemyExplosion.push(
             new Explosion(this.ctx, 60, 60, enemy.posX, enemy.posY)
           );
+          this.sEnemyExplosionSound.play();
           let index = this.sEnemys.indexOf(enemy);
           if (index > -1) {
             this.sEnemys.splice(index, 1);
@@ -305,6 +308,7 @@ const Game = {
           this.mEnemyExplosion.push(
             new Explosion(this.ctx, 100, 100, enemy.posX, enemy.posY)
           );
+          this.mEnemyExplosionSound.play();
           let index = this.mEnemys.indexOf(enemy);
           if (index > -1) {
             this.mEnemys.splice(index, 1);
@@ -330,6 +334,7 @@ const Game = {
           this.bEnemyExplosion.push(
             new Explosion(this.ctx, 80, 80, enemy.posX, enemy.posY)
           );
+          this.bEnemyExplosionSound.play();
           let index = this.bEnemys.indexOf(enemy);
           if (index > -1) {
             this.bEnemys.splice(index, 1);
@@ -351,6 +356,7 @@ const Game = {
         this.player.posX < powerUp.posX + this.player.width
       ) {
         this.life++;
+        this.powerUpSound.play();
         let index = this.firstPower.indexOf(powerUp);
         if (index > -1) {
           this.firstPower.splice(index, 1);
@@ -358,22 +364,6 @@ const Game = {
       }
     });
   },
-
-  // isCollisionSecondPowerUp: function() {
-  //   this.secondPower.forEach(powerUp => {
-  //     if (
-  //       this.player.posY < powerUp.posY &&
-  //       this.player.posX > powerUp.posX &&
-  //       this.player.posX < powerUp.posX + this.player.width
-  //     ) {
-  //       this.life++;
-  //       let index = this.secondPower.indexOf(powerUp);
-  //       if (index > -1) {
-  //         this.secondPower.splice(index, 1);
-  //       }
-  //     }
-  //   });
-  // },
 
   isCollisionSmall: function() {
     this.sEnemys.forEach(enemy => {
@@ -383,6 +373,8 @@ const Game = {
         this.player.posX < enemy.posX + this.player.width
       ) {
         this.life--;
+        this.score--;
+        this.sEnemyExplosionSound.play();
         this.playerExplosion.push(
           new Explosion(this.ctx, 60, 60, this.player.posX, this.player.posY)
         );
@@ -402,6 +394,8 @@ const Game = {
         this.player.posX < enemy.posX + this.player.width
       ) {
         this.life--;
+        this.score--;
+        this.mEnemyExplosionSound.play();
         this.playerExplosion.push(
           new Explosion(this.ctx, 60, 60, this.player.posX, this.player.posY)
         );
@@ -421,6 +415,8 @@ const Game = {
         this.player.posX < enemy.posX + this.player.width
       ) {
         this.life--;
+        this.score--;
+        this.bEnemyExplosionSound.play();
         this.playerExplosion.push(
           new Explosion(this.ctx, 60, 60, this.player.posX, this.player.posY)
         );
@@ -436,12 +432,16 @@ const Game = {
     setTimeout(() => {
       clearInterval(this.interval);
     }, 500);
+    this.musicGame.pause();
+    this.playerExplosionSound.play();
+    this.playerDeathSound.play();
+    this.musicGame.pause();
     this.playerExplosion.push(
       new Explosion(this.ctx, 120, 120, this.player.posX, this.player.posY)
     );
-    setTimeout(() =>{
-      document.querySelector('#game-over').style.display = "flex"
-    },600);
+    setTimeout(() => {
+      document.querySelector("#game-over").style.display = "flex";
+    }, 600);
   },
 
   randomIntFromInterval: function() {
