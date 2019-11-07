@@ -28,13 +28,14 @@ const Game = {
 
   start: function() {
     this.reset();
+    this.life = 5;
     this.interval = setInterval(() => {
       this.framesCounter++;
 
       this.clear();
       this.drawAll();
       this.moveAll();
-
+  
       this.clearClouds();
       this.clearEnemys();
       this.clearPowerUps();
@@ -53,7 +54,9 @@ const Game = {
       this.isCollisionMedium();
       this.isCollisionBig();
 
-      if (this.life < 1) this.gameOver();
+      if (this.life < 1) {
+        this.gameOver();
+      }
       if (this.framesCounter > 1000) this.framesCounter = 0;
     }, 1000 / this.fps);
   },
@@ -430,7 +433,15 @@ const Game = {
   },
 
   gameOver: function() {
-    clearInterval(this.interval);
+    setTimeout(() => {
+      clearInterval(this.interval);
+    }, 500);
+    this.playerExplosion.push(
+      new Explosion(this.ctx, 120, 120, this.player.posX, this.player.posY)
+    );
+    setTimeout(() =>{
+      document.querySelector('#game-over').style.display = "flex"
+    },600);
   },
 
   randomIntFromInterval: function() {

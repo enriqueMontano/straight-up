@@ -2,4 +2,104 @@ html,
 body {
   margin: 0;
   padding: 0;
+  background: black;
+  font-size: 10px;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+#arcade{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+#canvas{
+  display: none;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  border-radius: 3%;
+}
+
+#image {
+  /* width: 900px; */
+  height: 90vh;
+}
+
+#start-game {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: absolute;
+  flex-direction: column;
+  width: 512px;
+  height: 544px;
+  background-image: url("../img/title-game.png");
+  border-radius: 3%;
+}
+
+#game-over{
+  z-index: 9999;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: absolute;
+  flex-direction: column;
+  width: 512px;
+  height: 544px;
+  background: rgba(255, 255, 255, .2);
+  border-radius: 3%;
+}
+
+p{
+  color: white;
+  font-size: 5rem;
+  font-weight: bold;
+}
+
+#title{
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: absolute;
+  flex-direction: column;
+  width: 512px;
+  height: 544px;
+  border-radius: 3%;
+}
+
+#start-game button{
+  background-color: rgba(0, 0, 0, 0.5); /* Green */
+  border: 1px solid silver;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 5%;
+}
+
+
+#game-over button{
+  background-color: rgba(0, 0, 0, 0.5); /* Green */
+  border: 1px solid silver;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 5%;
 }
