@@ -5,10 +5,10 @@ const Game = {
   height: undefined,
   fps: 60,
   framesCounter: 0,
-  
+
   score: 0,
   life: 5,
-  
+
   playerKeys: {
     arrowUp: false,
     arrowRight: false,
@@ -20,7 +20,7 @@ const Game = {
   init: function() {
     this.canvas = document.getElementById("canvas");
     this.ctx = this.canvas.getContext("2d");
-   
+
     this.width = 512;
     this.height = 544;
     this.canvas.width = this.width;
@@ -62,6 +62,9 @@ const Game = {
   },
 
   reset: function() {
+    Score.init(this.ctx, this.score);
+    Lifes.init(this.ctx, this.life);
+
     this.desertBackground = new Background(
       this.ctx,
       512,
@@ -99,7 +102,7 @@ const Game = {
     this.bEnemyExplosion = [];
 
     this.musicGame = new Audio();
-    this.musicGame.src = "./audio/Abandoned-Hopes.mp3";
+    this.musicGame.src = "./audio/abandoned-hopes.mp3";
 
     this.playerExplosionSound = new Audio();
     this.playerExplosionSound.src = "./audio/player explosion.mp3";
@@ -118,9 +121,6 @@ const Game = {
 
     this.playerDeathSound = new Audio();
     this.playerDeathSound.src = "./audio/player-death.mp3";
-
-    Score.init(this.ctx, this.score);
-    Lifes.init(this.ctx, this.life);
   },
 
   generateClouds: function() {
@@ -150,6 +150,7 @@ const Game = {
           2
         )
       );
+
     if (this.framesCounter % 100 === 0)
       this.mEnemys.push(
         new Enemy(
@@ -239,6 +240,10 @@ const Game = {
     // console.log(this.secondPower);
   },
 
+  clear: function() {
+    this.ctx.clearRect(0, 0, this.width, this.height);
+  },
+
   clearClouds: function() {
     this.sClouds = this.sClouds.filter(
       cloud => cloud.posY - cloud.height <= this.height
@@ -264,10 +269,6 @@ const Game = {
     this.firstPower = this.firstPower.filter(
       powerUp => powerUp.posY <= this.height
     );
-  },
-
-  clear: function() {
-    this.ctx.clearRect(0, 0, this.width, this.height);
   },
 
   isCollisionSenemy: function() {
