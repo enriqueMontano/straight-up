@@ -237,7 +237,6 @@ const Game = {
     // console.log(this.mEnemys);
     // console.log(this.bEnemys);
     // console.log(this.firstPower);
-    // console.log(this.secondPower);
   },
 
   clear: function() {
