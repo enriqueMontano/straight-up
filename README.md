@@ -1,6 +1,6 @@
 # straight-up-canvas-game
 
-A simple 2d game maked withcanvas.
+A simple 2d game maked with canvas.
 
 
 - HOW TO PLAY:
