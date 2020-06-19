@@ -17,7 +17,7 @@ const Game = {
     space: false
   },
 
-  init: function() {
+  init: function () {
     this.canvas = document.getElementById("canvas");
     this.ctx = this.canvas.getContext("2d");
 
@@ -29,7 +29,7 @@ const Game = {
     this.start();
   },
 
-  start: function() {
+  start: function () {
     this.reset();
     this.life = 5;
     this.musicGame.play();
@@ -45,12 +45,12 @@ const Game = {
       this.generatePowerUps();
 
       this.isCollisionSenemy();
-      this.isCollisionMenemy();
-      this.isCollisionBenemy();
+      // this.isCollisionMenemy();
+      // this.isCollisionBenemy();
       this.isCollisionFirstPowerUp();
       this.isCollisionSmall();
-      this.isCollisionMedium();
-      this.isCollisionBig();
+      // this.isCollisionMedium();
+      // this.isCollisionBig();
 
       this.clearClouds();
       this.clearEnemys();
@@ -61,7 +61,7 @@ const Game = {
     }, 1000 / this.fps);
   },
 
-  reset: function() {
+  reset: function () {
     Score.init(this.ctx, this.score);
     Lifes.init(this.ctx, this.life);
 
@@ -90,16 +90,16 @@ const Game = {
     this.sClouds = [];
     this.tClouds = [];
 
-    this.sEnemys = [];
-    this.mEnemys = [];
-    this.bEnemys = [];
+    this.enemys = [];
+    // this.mEnemys = [];
+    // this.bEnemys = [];
 
     this.firstPower = [];
 
     this.playerExplosion = [];
     this.sEnemyExplosion = [];
-    this.mEnemyExplosion = [];
-    this.bEnemyExplosion = [];
+    // this.mEnemyExplosion = [];
+    // this.bEnemyExplosion = [];
 
     this.musicGame = new Audio();
     this.musicGame.src = "./audio/abandoned-hopes.mp3";
@@ -110,11 +110,11 @@ const Game = {
     this.sEnemyExplosionSound = new Audio();
     this.sEnemyExplosionSound.src = "./audio/senemy-explosion.mp3";
 
-    this.mEnemyExplosionSound = new Audio();
-    this.mEnemyExplosionSound.src = "./audio/menemy-explosion.mp3";
+    // this.mEnemyExplosionSound = new Audio();
+    // this.mEnemyExplosionSound.src = "./audio/menemy-explosion.mp3";
 
-    this.bEnemyExplosionSound = new Audio();
-    this.bEnemyExplosionSound.src = "./audio/benemy-explosion.mp3";
+    // this.bEnemyExplosionSound = new Audio();
+    // this.bEnemyExplosionSound.src = "./audio/benemy-explosion.mp3";
 
     this.powerUpSound = new Audio();
     this.powerUpSound.src = "./audio/power-up.mp3";
@@ -123,7 +123,7 @@ const Game = {
     this.playerDeathSound.src = "./audio/player-death.mp3";
   },
 
-  generateClouds: function() {
+  generateClouds: function () {
     if (this.framesCounter % 150 === 0)
       this.tClouds.push(
         new Clouds(this.ctx, 512, 206, "./img/clouds-transparent.png", 0, 0, 6)
@@ -135,54 +135,13 @@ const Game = {
       );
   },
 
-  generateEnemys: function() {
-    if (this.framesCounter % 50 === 0)
-      this.sEnemys.push(
-        new Enemy(
-          this.ctx,
-          32,
-          32,
-          "./img/enemy-small.png",
-          this.randomIntFromInterval(),
-          0,
-          4,
-          "small",
-          2
-        )
-      );
-
-    if (this.framesCounter % 100 === 0)
-      this.mEnemys.push(
-        new Enemy(
-          this.ctx,
-          64,
-          32,
-          "./img/enemy-medium.png",
-          this.randomIntFromInterval(),
-          2,
-          6,
-          "medium",
-          4
-        )
-      );
-
-    if (this.framesCounter % 200 === 0)
-      this.bEnemys.push(
-        new Enemy(
-          this.ctx,
-          64,
-          64,
-          "./img/enemy-big.png",
-          this.randomIntFromInterval(),
-          3,
-          7,
-          "big",
-          6
-        )
-      );
+  generateEnemys: function () {
+    if (this.framesCounter % 50 === 0) this.sEnemys.push(new EnemyFactory(this.ctx, this.randomIntFromInterval(), "easy"))
+    if (this.framesCounter % 100 === 0) this.sEnemys.push(new EnemyFactory(this.ctx, this.randomIntFromInterval(), "normal"))
+    if (this.framesCounter % 200 === 0) this.sEnemys.push(new EnemyFactory(this.ctx, this.randomIntFromInterval(), "hard"))
   },
 
-  generatePowerUps: function() {
+  generatePowerUps: function () {
     if (this.framesCounter % 1000 === 0)
       this.firstPower.push(
         new Powerup(
@@ -197,38 +156,38 @@ const Game = {
       );
   },
 
-  drawAll: function() {
+  drawAll: function () {
     this.desertBackground.draw();
     this.tClouds.forEach(cloud => cloud.draw());
     this.firstPower.forEach(powerUp => powerUp.draw(this.framesCounter));
     this.player.draw(this.framesCounter);
     this.sEnemys.forEach(enemy => enemy.draw(this.framesCounter));
-    this.mEnemys.forEach(enemy => enemy.draw(this.framesCounter));
-    this.bEnemys.forEach(enemy => enemy.draw(this.framesCounter));
+    // this.mEnemys.forEach(enemy => enemy.draw(this.framesCounter));
+    // this.bEnemys.forEach(enemy => enemy.draw(this.framesCounter));
     this.playerExplosion.forEach(explosion =>
       explosion.draw(this.framesCounter)
     );
     this.sEnemyExplosion.forEach(explosion =>
       explosion.draw(this.framesCounter)
     );
-    this.mEnemyExplosion.forEach(explosion =>
-      explosion.draw(this.framesCounter)
-    );
-    this.bEnemyExplosion.forEach(explosion =>
-      explosion.draw(this.framesCounter)
-    );
+    // this.mEnemyExplosion.forEach(explosion =>
+    //   explosion.draw(this.framesCounter)
+    // );
+    // this.bEnemyExplosion.forEach(explosion =>
+    //   explosion.draw(this.framesCounter)
+    // );
     this.sClouds.forEach(cloud => cloud.draw());
     Score.draw(this.score);
     Lifes.draw(this.life);
   },
 
-  moveAll: function() {
+  moveAll: function () {
     this.desertBackground.move();
     this.tClouds.forEach(cloud => cloud.move());
     this.player.move();
     this.sEnemys.forEach(enemy => enemy.move());
-    this.mEnemys.forEach(enemy => enemy.move());
-    this.bEnemys.forEach(enemy => enemy.chasePlayerMovement(this.player.posX));
+    // this.mEnemys.forEach(enemy => enemy.move());
+    // this.bEnemys.forEach(enemy => enemy.chasePlayerMovement(this.player.posX));
     this.firstPower.forEach(powerUp => powerUp.move());
     this.sClouds.forEach(cloud => cloud.move());
     // console.log(this.tClouds);
@@ -239,11 +198,11 @@ const Game = {
     // console.log(this.firstPower);
   },
 
-  clear: function() {
+  clear: function () {
     this.ctx.clearRect(0, 0, this.width, this.height);
   },
 
-  clearClouds: function() {
+  clearClouds: function () {
     this.sClouds = this.sClouds.filter(
       cloud => cloud.posY - cloud.height <= this.height
     );
@@ -252,25 +211,25 @@ const Game = {
     );
   },
 
-  clearEnemys: function() {
+  clearEnemys: function () {
     this.sEnemys = this.sEnemys.filter(
       enemy => enemy.posY - enemy.height <= this.height
-    );
-    this.mEnemys = this.mEnemys.filter(
-      enemy => enemy.posY - enemy.height <= this.height
-    );
-    this.bEnemys = this.bEnemys.filter(
-      enemy => enemy.posY - enemy.height <= this.height
-    );
+    )
+    // this.mEnemys = this.mEnemys.filter(
+    //   enemy => enemy.posY - enemy.height <= this.height
+    // );
+    // this.bEnemys = this.bEnemys.filter(
+    //   enemy => enemy.posY - enemy.height <= this.height
+    // );
   },
 
-  clearPowerUps: function() {
+  clearPowerUps: function () {
     this.firstPower = this.firstPower.filter(
       powerUp => powerUp.posY <= this.height
     );
   },
 
-  isCollisionSenemy: function() {
+  isCollisionSenemy: function () {
     this.player.bullets.forEach(bullet =>
       this.sEnemys.forEach(enemy => {
         if (
@@ -296,59 +255,59 @@ const Game = {
     );
   },
 
-  isCollisionMenemy: function() {
-    this.player.bullets.forEach(bullet =>
-      this.mEnemys.forEach(enemy => {
-        if (
-          bullet.posY < enemy.posY &&
-          bullet.posX > enemy.posX &&
-          bullet.posX < enemy.posX + enemy.width
-        ) {
-          this.score = this.score + 5;
-          this.mEnemyExplosion.push(
-            new Explosion(this.ctx, 100, 100, enemy.posX, enemy.posY)
-          );
-          this.mEnemyExplosionSound.play();
-          let index = this.mEnemys.indexOf(enemy);
-          if (index > -1) {
-            this.mEnemys.splice(index, 1);
-          }
-          let index2 = this.player.bullets.indexOf(bullet);
-          if (index2 > -1) {
-            this.player.bullets.splice(index2, 1);
-          }
-        }
-      })
-    );
-  },
+  // isCollisionMenemy: function() {
+  //   this.player.bullets.forEach(bullet =>
+  //     this.mEnemys.forEach(enemy => {
+  //       if (
+  //         bullet.posY < enemy.posY &&
+  //         bullet.posX > enemy.posX &&
+  //         bullet.posX < enemy.posX + enemy.width
+  //       ) {
+  //         this.score = this.score + 5;
+  //         this.mEnemyExplosion.push(
+  //           new Explosion(this.ctx, 100, 100, enemy.posX, enemy.posY)
+  //         );
+  //         this.mEnemyExplosionSound.play();
+  //         let index = this.mEnemys.indexOf(enemy);
+  //         if (index > -1) {
+  //           this.mEnemys.splice(index, 1);
+  //         }
+  //         let index2 = this.player.bullets.indexOf(bullet);
+  //         if (index2 > -1) {
+  //           this.player.bullets.splice(index2, 1);
+  //         }
+  //       }
+  //     })
+  //   );
+  // },
 
-  isCollisionBenemy: function() {
-    this.player.bullets.forEach(bullet =>
-      this.bEnemys.forEach(enemy => {
-        if (
-          bullet.posY < enemy.posY &&
-          bullet.posX > enemy.posX &&
-          bullet.posX < enemy.posX + enemy.width
-        ) {
-          this.score = this.score + 10;
-          this.bEnemyExplosion.push(
-            new Explosion(this.ctx, 80, 80, enemy.posX, enemy.posY)
-          );
-          this.bEnemyExplosionSound.play();
-          let index = this.bEnemys.indexOf(enemy);
-          if (index > -1) {
-            this.bEnemys.splice(index, 1);
-          }
-          let index2 = this.player.bullets.indexOf(bullet);
-          if (index2 > -1) {
-            this.player.bullets.splice(index2, 1);
-          }
-        }
-      })
-    );
-  },
+  // isCollisionBenemy: function() {
+  //   this.player.bullets.forEach(bullet =>
+  //     this.bEnemys.forEach(enemy => {
+  //       if (
+  //         bullet.posY < enemy.posY &&
+  //         bullet.posX > enemy.posX &&
+  //         bullet.posX < enemy.posX + enemy.width
+  //       ) {
+  //         this.score = this.score + 10;
+  //         this.bEnemyExplosion.push(
+  //           new Explosion(this.ctx, 80, 80, enemy.posX, enemy.posY)
+  //         );
+  //         this.bEnemyExplosionSound.play();
+  //         let index = this.bEnemys.indexOf(enemy);
+  //         if (index > -1) {
+  //           this.bEnemys.splice(index, 1);
+  //         }
+  //         let index2 = this.player.bullets.indexOf(bullet);
+  //         if (index2 > -1) {
+  //           this.player.bullets.splice(index2, 1);
+  //         }
+  //       }
+  //     })
+  //   );
+  // },
 
-  isCollisionFirstPowerUp: function() {
+  isCollisionFirstPowerUp: function () {
     this.firstPower.forEach(powerUp => {
       if (
         this.player.posY < powerUp.posY &&
@@ -365,7 +324,7 @@ const Game = {
     });
   },
 
-  isCollisionSmall: function() {
+  isCollisionSmall: function () {
     this.sEnemys.forEach(enemy => {
       if (
         this.player.posY < enemy.posY &&
@@ -386,49 +345,49 @@ const Game = {
     });
   },
 
-  isCollisionMedium: function() {
-    this.mEnemys.forEach(enemy => {
-      if (
-        this.player.posY < enemy.posY &&
-        this.player.posX > enemy.posX &&
-        this.player.posX < enemy.posX + this.player.width
-      ) {
-        this.life--;
-        this.score--;
-        this.mEnemyExplosionSound.play();
-        this.playerExplosion.push(
-          new Explosion(this.ctx, 60, 60, this.player.posX, this.player.posY)
-        );
-        let index = this.mEnemys.indexOf(enemy);
-        if (index > -1) {
-          this.mEnemys.splice(index, 1);
-        }
-      }
-    });
-  },
+  // isCollisionMedium: function() {
+  //   this.mEnemys.forEach(enemy => {
+  //     if (
+  //       this.player.posY < enemy.posY &&
+  //       this.player.posX > enemy.posX &&
+  //       this.player.posX < enemy.posX + this.player.width
+  //     ) {
+  //       this.life--;
+  //       this.score--;
+  //       this.mEnemyExplosionSound.play();
+  //       this.playerExplosion.push(
+  //         new Explosion(this.ctx, 60, 60, this.player.posX, this.player.posY)
+  //       );
+  //       let index = this.mEnemys.indexOf(enemy);
+  //       if (index > -1) {
+  //         this.mEnemys.splice(index, 1);
+  //       }
+  //     }
+  //   });
+  // },
 
-  isCollisionBig: function() {
-    this.bEnemys.forEach(enemy => {
-      if (
-        this.player.posY < enemy.posY &&
-        this.player.posX > enemy.posX &&
-        this.player.posX < enemy.posX + this.player.width
-      ) {
-        this.life--;
-        this.score--;
-        this.bEnemyExplosionSound.play();
-        this.playerExplosion.push(
-          new Explosion(this.ctx, 60, 60, this.player.posX, this.player.posY)
-        );
-        let index = this.bEnemys.indexOf(enemy);
-        if (index > -1) {
-          this.bEnemys.splice(index, 1);
-        }
-      }
-    });
-  },
+  // isCollisionBig: function() {
+  //   this.bEnemys.forEach(enemy => {
+  //     if (
+  //       this.player.posY < enemy.posY &&
+  //       this.player.posX > enemy.posX &&
+  //       this.player.posX < enemy.posX + this.player.width
+  //     ) {
+  //       this.life--;
+  //       this.score--;
+  //       this.bEnemyExplosionSound.play();
+  //       this.playerExplosion.push(
+  //         new Explosion(this.ctx, 60, 60, this.player.posX, this.player.posY)
+  //       );
+  //       let index = this.bEnemys.indexOf(enemy);
+  //       if (index > -1) {
+  //         this.bEnemys.splice(index, 1);
+  //       }
+  //     }
+  //   });
+  // },
 
-  gameOver: function() {
+  gameOver: function () {
     setTimeout(() => {
       clearInterval(this.interval);
     }, 500);
@@ -444,7 +403,7 @@ const Game = {
     }, 600);
   },
 
-  randomIntFromInterval: function() {
+  randomIntFromInterval: function () {
     return Math.floor(Math.random() * (this.width - 0)) + 0;
   }
 };
