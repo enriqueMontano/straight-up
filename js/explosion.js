@@ -1,17 +1,17 @@
 class Explosion {
   constructor(ctx, width, heigth, playerX, playerY) {
-    this.ctx = ctx;
-    this.width = width;
-    this.heigth = heigth;
+    this.ctx = ctx
+    this.width = width
+    this.heigth = heigth
 
-    this.image = new Image();
-    this.image.src = "./img/explosion.png";
+    this.image = new Image()
+    this.image.src = './img/explosion.png'
 
-    this.posX = playerX;
-    this.posY = playerY;
+    this.posX = playerX
+    this.posY = playerY
 
-    this.framesIndex = 0;
-    this.frames = 5;
+    this.framesIndex = 0
+    this.frames = 5
   }
 
   draw(framesCounter) {
@@ -25,11 +25,11 @@ class Explosion {
       this.posY - 7,
       this.width,
       this.heigth
-    );
-    this.animate(framesCounter);
+    )
+    this.animate(framesCounter)
   }
 
   animate(framesCounter) {
-    if (framesCounter % 10 === 0) this.framesIndex++;
+    if (framesCounter % 10 === 0) this.framesIndex++
   }
 }
