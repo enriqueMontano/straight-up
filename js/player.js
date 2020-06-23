@@ -27,9 +27,6 @@ class Player {
 
     this.collisionSound = new Audio()
     this.collisionSound.src = './audio/player explosion.mp3'
-
-    this.deathSound = new Audio()
-    this.deathSound.src = './audio/player-death.mp3'
   }
 
   draw(framesCounter) {

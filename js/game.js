@@ -89,6 +89,9 @@ const Game = {
 
     this.musicGame = new Audio()
     this.musicGame.src = './audio/abandoned-hopes.mp3'
+
+    this.endGame = new Audio()
+    this.endGame.src = './audio/player-death.mp3'
   },
 
   generateClouds: function () {
@@ -172,13 +175,12 @@ const Game = {
   },
 
   gameOver() {
-    setTimeout(() => clearInterval(this.interval), 500)
+    setTimeout(() => {
+      clearInterval(this.interval)
+      document.querySelector('#game-over').style.display = 'flex'
+    }, 500)
     this.musicGame.pause()
-    this.player.collisionSound.play()
-    this.player.deathSound.play()
-    this.musicGame.pause()
-    this.explosions.push(new Explosion(this.ctx, 120, 120, this.player.posX, this.player.posY))
-    setTimeout(() => (document.querySelector('#game-over').style.display = 'flex'), 600)
+    this.endGame.play()
   },
 
   randomPosX() {
