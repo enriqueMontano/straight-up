@@ -24,6 +24,12 @@ class Player {
 
     this.sound = new Audio()
     this.sound.src = './audio/shoot.mp3'
+
+    this.collisionSound = new Audio()
+    this.collisionSound.src = './audio/player explosion.mp3'
+
+    this.deathSound = new Audio()
+    this.deathSound.src = './audio/player-death.mp3'
   }
 
   draw(framesCounter) {
@@ -40,6 +46,7 @@ class Player {
     )
     this.clearBullets()
     this.bullets.forEach((bullet) => bullet.draw(framesCounter))
+    this.move()
     this.animate(framesCounter)
   }
 
@@ -119,24 +126,11 @@ class Player {
 
   shoot() {
     this.bullets.push(
-      new Bullet(
-        this.ctx,
-        10,
-        26,
-        './img/laser-bolt-2.png',
-        this.x,
-        this.y,
-        this.width,
-        this.height,
-        4,
-        'player'
-      )
+      new Bullet(this.ctx, 10, 26, './img/laser-bolt-2.png', this.x, this.y, this.width, this.height, 4, 'player')
     )
   }
 
   clearBullets() {
-    this.bullets = this.bullets.filter(
-      (bullet) => bullet.y + bullet.height >= this.height
-    )
+    this.bullets = this.bullets.filter((bullet) => bullet.y + bullet.height >= this.height)
   }
 }
