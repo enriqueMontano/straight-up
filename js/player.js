@@ -46,8 +46,8 @@ class Player {
     )
     this.clearBullets()
     this.bullets.forEach((bullet) => bullet.draw(framesCounter))
-    this.move()
     this.animate(framesCounter)
+    this.move()
   }
 
   move() {

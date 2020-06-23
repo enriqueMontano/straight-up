@@ -1,16 +1,5 @@
 class Bullet {
-  constructor(
-    ctx,
-    width,
-    height,
-    image,
-    playerX,
-    playerY,
-    playerWidth,
-    playerHeight,
-    speed,
-    playerType
-  ) {
+  constructor(ctx, width, height, image, playerX, playerY, playerWidth, playerHeight, speed, playerType) {
     this.ctx = ctx
     this.width = width
     this.height = height
@@ -40,6 +29,7 @@ class Bullet {
       this.height
     )
     this.animate(framesCounter)
+    this.move()
   }
 
   animate(framesCounter) {

@@ -5,7 +5,7 @@ class Enemy {
     this.height = height
 
     this.image = new Image()
-    this.explosionSound = new Audio()
+    this.sound = new Audio()
 
     this.frames = 2
     this.framesIndex = 0
@@ -29,6 +29,7 @@ class Enemy {
       this.height
     )
     this.animate(framesCounter)
+    this.move()
   }
 
   animate(framesCounter) {
@@ -45,7 +46,7 @@ class EasyEnemy extends Enemy {
   constructor(ctx, width, height, x, y, velocity) {
     super(ctx, width, height, x, y, velocity)
     this.image.src = './img/enemy-easy.png'
-    this.explosionSound.src = './audio/enemy-easy-explosion.mp3'
+    this.sound.src = './audio/enemy-easy-explosion.mp3'
   }
 }
 
@@ -53,7 +54,7 @@ class NormalEnemy extends Enemy {
   constructor(ctx, width, height, x, y, velocity) {
     super(ctx, width, height, x, y, velocity)
     this.image.src = './img/enemy-normal.png'
-    this.explosionSound.src = './audio/enemy-normal-explosion.mp3'
+    this.sound.src = './audio/enemy-normal-explosion.mp3'
   }
 }
 
@@ -61,6 +62,6 @@ class HardEnemy extends Enemy {
   constructor(ctx, width, height, x, y, velocity) {
     super(ctx, width, height, x, y, velocity)
     this.image.src = './img/enemy-hard.png'
-    this.explosionSound.src = './audio/enemy-hard-explosion.mp3'
+    this.sound.src = './audio/enemy-hard-explosion.mp3'
   }
 }

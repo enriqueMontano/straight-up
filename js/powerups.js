@@ -1,19 +1,22 @@
 class Powerup {
-  constructor(ctx, width, heigth, image, posX, posY, speed) {
-    this.ctx = ctx;
-    this.width = width;
-    this.heigth = heigth;
+  constructor(ctx, x) {
+    this.ctx = ctx
+    this.width = 16
+    this.height = 16
 
-    this.image = new Image();
-    this.image.src = image;
+    this.image = new Image()
+    this.image.src = './img/power-up-2.png'
 
-    this.frames = 2;
-    this.framesIndex = 0;
+    this.sound = new Audio()
+    this.sound.src = './audio/power-up.mp3'
 
-    this.posX = posX;
-    this.posY = posY;
+    this.frames = 2
+    this.framesIndex = 0
 
-    this.vY = speed;
+    this.x = x
+    this.y = 0
+
+    this.velocity = 3
   }
 
   draw(framesCounter) {
@@ -23,20 +26,21 @@ class Powerup {
       0,
       Math.floor(this.image.width / this.frames),
       this.image.height,
-      this.posX,
-      this.posY,
+      this.x,
+      this.y,
       this.width,
-      this.heigth
-    );
-    this.animate(framesCounter);
+      this.height
+    )
+    this.animate(framesCounter)
+    this.move()
   }
 
   animate(framesCounter) {
-    if (framesCounter % 10 === 0) this.framesIndex++;
-    if (this.framesIndex > 1) this.framesIndex = 0;
+    if (framesCounter % 10 === 0) this.framesIndex++
+    if (this.framesIndex > 1) this.framesIndex = 0
   }
 
   move() {
-    this.posY += this.vY;
+    this.y += this.velocity
   }
 }
