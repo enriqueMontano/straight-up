@@ -13,6 +13,7 @@ const Game = {
   enemies: [],
   explosions: [],
   firstPower: [],
+  clouds: [],
 
   init: function () {
     this.canvas = document.getElementById('canvas');
@@ -73,9 +74,6 @@ const Game = {
 
     this.player = new Player(this.ctx, this.width, this.height);
 
-    this.sClouds = [];
-    this.tClouds = [];
-
     this.musicGame = new Audio();
     this.musicGame.src = './audio/abandoned-hopes.mp3';
 
@@ -83,16 +81,13 @@ const Game = {
     this.endGame.src = './audio/player-death.mp3';
   },
 
-  generateClouds: function () {
+  generateClouds() {
+    console.log(this.clouds);
     if (this.framesCounter % 150 === 0)
-      this.tClouds.push(
-        new Clouds(this.ctx, 512, 206, './img/clouds-transparent.png', 0, 0, 6)
-      );
+      this.clouds.push(new CloudFactory(this.ctx, 'mid'));
 
     if (this.framesCounter % 350 === 0)
-      this.sClouds.push(
-        new Clouds(this.ctx, 1024, 412, './img/clouds.png', 0, 0, 12)
-      );
+      this.clouds.push(new CloudFactory(this.ctx, 'high'));
   },
 
   generateEnemies() {
@@ -113,12 +108,11 @@ const Game = {
 
   drawAll: function () {
     this.desertBackground.draw();
-    this.tClouds.forEach((cloud) => cloud.draw());
     this.firstPower.forEach((powerUp) => powerUp.draw(this.framesCounter));
     this.player.draw(this.framesCounter);
     this.enemies.forEach((enemy) => enemy.draw(this.framesCounter));
     this.explosions.forEach((explosion) => explosion.draw(this.framesCounter));
-    this.sClouds.forEach((cloud) => cloud.draw());
+    this.clouds.forEach((cloud) => cloud.draw());
     Score.draw(this.score);
     Lifes.draw(this.life);
   },
@@ -129,7 +123,6 @@ const Game = {
 
   clear(arr) {
     arr = arr.filter((elem) => elem.y - elem.height <= this.height);
-    console.log(arr);
   },
 
   isPlayerCollision(arr) {
