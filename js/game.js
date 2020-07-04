@@ -36,9 +36,7 @@ const Game = {
       this.clearCanvas();
       this.drawAll();
 
-      this.generateClouds();
-      this.generateEnemies();
-      this.generatePowerUps();
+      this.generate();
 
       if (this.isPlayerCollision(this.firstPower)) this.life++;
       if (this.isPlayerCollision(this.enemies)) {
@@ -81,29 +79,20 @@ const Game = {
     this.endGame.src = './audio/player-death.mp3';
   },
 
-  generateClouds() {
-    console.log(this.clouds);
-    if (this.framesCounter % 150 === 0)
+  generate() {
+    if (this.framesCounter % 50 === 0) {
+      this.enemies.push(new EnemyFactory(this.ctx, 'easy', this.width));
+      this.firstPower.push(new Powerup(this.ctx, this.randomPosX()));
+    }
+    if (this.framesCounter % 100 === 0)
+      this.enemies.push(new EnemyFactory(this.ctx, 'normal', this.width));
+    if (this.framesCounter % 150 === 0) {
       this.clouds.push(new CloudFactory(this.ctx, 'mid'));
-
+    }
+    if (this.framesCounter % 200 === 0)
+      this.enemies.push(new EnemyFactory(this.ctx, 'hard', this.width));
     if (this.framesCounter % 350 === 0)
       this.clouds.push(new CloudFactory(this.ctx, 'high'));
-  },
-
-  generateEnemies() {
-    if (this.framesCounter % 50 === 0)
-      this.enemies.push(new EnemyFactory(this.ctx, this.randomPosX(), 'easy'));
-    if (this.framesCounter % 100 === 0)
-      this.enemies.push(
-        new EnemyFactory(this.ctx, this.randomPosX(), 'normal')
-      );
-    if (this.framesCounter % 200 === 0)
-      this.enemies.push(new EnemyFactory(this.ctx, this.randomPosX(), 'hard'));
-  },
-
-  generatePowerUps: function () {
-    if (this.framesCounter % 50 === 0)
-      this.firstPower.push(new Powerup(this.ctx, this.randomPosX()));
   },
 
   drawAll: function () {

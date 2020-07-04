@@ -1,12 +1,14 @@
-function EnemyFactory(ctx, x, type) {
+function EnemyFactory(ctx, type, canvasWitdh) {
+  const randomPosX = (witdh) => Math.floor(Math.random() * (witdh - 0)) + 0;
+
   if (type === 'easy') {
-    return new EasyEnemy(ctx, 32, 32, x, 0, 4);
+    return new EasyEnemy(ctx, 32, 32, randomPosX(canvasWitdh), 4);
   }
   if (type === 'normal') {
-    return new NormalEnemy(ctx, 64, 32, x, 0, 6);
+    return new NormalEnemy(ctx, 64, 32, randomPosX(canvasWitdh), 6);
   }
   if (type === 'hard') {
-    return new HardEnemy(ctx, 64, 64, x, 0, 7);
+    return new HardEnemy(ctx, 64, 64, randomPosX(canvasWitdh), 7);
   }
 }
 
